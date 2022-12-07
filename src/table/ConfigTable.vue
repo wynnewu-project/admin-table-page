@@ -1,0 +1,241 @@
+<template> 
+  <slot name="search">
+    <ct-search
+      v-if="searchFields.length || hiddenSearchFields.length"
+      :showFields="searchFields"
+      :hiddenFields="hiddenSearchFields"
+    />
+  </slot>
+  <el-card> 
+    <slot name="tools">
+      <config-table-tool 
+        :buttons="toolButtons"
+        :refresh="refresh"
+        @auto-refresh="handleAutoRefresh"
+        @manual-refresh="getTableData"
+        @pause-auto-refresh="handlePauseAutoRefresh"
+      />
+    </slot>
+    <el-table
+      ref="tableRef"
+      v-loading="loading"
+      :highlight-current-row="selectable === 'single'"
+      @current-change="handleSelectionChange"
+      @selection-change="handleSelectionChange"
+      :header-cell-style="{
+        backgroundColor: '#fafafa'
+      }"
+      border
+      :data=tableData
+      v-bind="elTable"
+    > 
+      <el-table-column type="index" width="50" v-if="showIndex"/>
+      <el-table-column type="selection" width="50" reserve-selection v-if="selectable === 'multiple'"/>
+      <template 
+        v-for="{ hidden, ...elCol} in columns"
+        :key="elCol.prop"
+      >
+        <el-table-column
+          v-if="!hidden"
+          align="center"
+          v-bind="elCol"
+        > 
+          <template #default="{ row, column }"> 
+            <slot :name="elCol.prop" :row="row" >{{ row[column.property ] }}</slot>
+          </template>
+        </el-table-column>
+      </template>
+      <el-table-column 
+        v-if="$slots.actions || actionColumn"
+        prop="actions"
+        align="center"
+        :label="actionColumnLabel ?? t('label.actionColumn')"
+      > 
+        <template #default="{ row }">
+          <slot name="actions" :row="row">
+            <template 
+              v-for="(action, index) in actionColumn"
+              :key="action.text"
+            > 
+              <el-divider direction="vertical" v-if="index" class="hidden-xs-only"/>
+              <el-button 
+                type="primary" 
+                link 
+                @click="() => action.onClick(row)"
+              >{{action.text}}</el-button>
+            </template>
+          </slot>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="table-pagination">
+      <el-pagination
+        v-model:current-page="page"
+        v-model:page-size="limit"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="getTableData"
+        @current-change="getTableData"
+        :total="total"
+        v-bind="elPagination"
+      />
+    </div>
+  </el-card>
+</template>
+
+<script setup> 
+import ConfigTableTool from "../table-tool/ConfigTableTool.vue";
+import CtSearch from "../table-search/CTSearch.vue";
+
+import { computed, onMounted, onUnmounted, provide, ref, watch, watchEffect } from "vue";
+import tableProps from "./props";
+import useMediaQuery from "../utils/useMediaQuery";
+import { filter, isNull, isString, omitBy, slice, isEmpty } from "lodash/fp";
+import { useLocale } from "../locals/useLocale";
+import { debounce } from "lodash";
+
+const props = defineProps(tableProps);
+const emits = defineEmits(["selectChange"]);
+
+const tableRef = ref();
+const tableData = ref([]);
+const filteredData = ref(props.data);
+const { breakpoint } = useMediaQuery();
+
+const { t } = useLocale(computed(()=>props.locale))
+let timer = null;
+const loading = ref(false);
+const selectedRows = ref();
+
+
+
+const page = ref(1);
+const limit = ref(10);
+const total = ref(props?.data.length ?? 0);
+const offset = computed(() => {
+  return (page.value - 1) * limit.value;
+})
+
+const query = ref({});
+const queryChange = ref(false);
+
+[...props.searchFields,  ...props.hiddenSearchFields].forEach(field => {
+  query.value[field.name] = field.default ?? null
+})
+
+
+provide("breakpoint", breakpoint);
+provide("query",  query);
+provide("translate", t);
+
+const fetchRemoteData = async () => {
+  const finalQuery = {
+    ...query.value,
+    ...props.extraQuery,
+    page: page.value,
+    offset: offset.value,
+    limit: limit.value
+  }
+  const res = await props.fetchMethod(finalQuery);
+  total.value = res[props.totalKey] ?? 0;
+  tableData.value = res[props.listKey] ?? [];
+}
+
+const filterLocalData = () => {
+  if(queryChange.value) {
+    console.log('query', query.value)
+    const filterParams = omitBy((value) => {
+      return isNull(value) || value === "" 
+    })({
+      ...query.value,
+      ...props.extraQuery
+    });
+    filteredData.value = filter((o) => {
+      let filter = true;
+      for(let [key, value] of Object.entries(filterParams)) {
+        if(isString(value)) {
+          const testStr = new RegExp(value+'');
+          filter = testStr.test(o[key]);
+        } else {
+          filter = value === o[key];
+        }
+        if(!filter) break;
+      }
+      return filter
+    })(props.data);
+  }
+  tableData.value = slice(
+    offset.value,
+    offset.value + limit.value
+  )(filteredData.value);
+}
+
+
+const getTableData = () => {
+  loading.value = true;
+  if(props.data && !props.fetchMethod) {
+    filterLocalData();
+  } else {
+    fetchRemoteData();
+  }
+  loading.value = false;
+}
+
+
+
+watch(query, async () => {
+  queryChange.value = true;
+  handleQueryChange();
+}, {
+  deep: true
+})
+
+const handleQueryChange = debounce(getTableData, 500);
+
+
+const handleAutoRefresh = () => {
+  timer = setInterval(getTableData, props.refresh);
+}
+
+const handlePauseAutoRefresh = () => {
+  clearInterval(timer);
+}
+
+const handleSelectionChange = (selectRows) => {
+  selectedRows.value = selectRows;
+  emits("selectChange", selectRows)
+}
+
+onMounted(() => {
+  getTableData();
+  if(typeof(props.refresh) === 'number') {
+    handleAutoRefresh();
+  }
+})
+
+onUnmounted(() => {
+  handlePauseAutoRefresh();
+})
+
+defineExpose({
+  reload: getTableData
+})
+
+</script>
+
+<style scoped lang="scss"> 
+.search-item {
+  display: flex;
+  align-items: center;
+  &-label {
+    min-width: 100px;
+  }
+}
+
+.table-pagination {
+  margin-top: 8px;
+  overflow: hidden;
+  >* {
+    float: right;
+  }
+}
+</style>
