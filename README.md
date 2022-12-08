@@ -18,6 +18,7 @@ yarn add vue3-config-table
 ### Global Scope
 ```javascript
 import ConfigTable from "vue3-config-table";
+import "vue3-config-table/lib/style.css";
 import { createApp } from "vue";
 
 const app = createApp(...);
@@ -41,7 +42,8 @@ app.use(ConfigTable);
 </template>
 
 <script setup>
-import ConfigTable from "vue3-config-table";
+import { ConfigTable } from "vue3-config-table";
+import "vue3-config-table/lib/style.css";
 import { getDataApi } from "@/api/data";
 
 const columns = [{

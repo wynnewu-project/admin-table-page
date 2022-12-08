@@ -4,7 +4,7 @@ import en from "./en";
 import { watch, ref } from "vue";
 
 export const useLocale = (lang) => {
-  const locale = ref(lang ?? "zhCn");
+  const locale = ref(lang.value ?? "zhCn");
   const i18n = createI18n({
     legacy: false,
     locale: locale.value,

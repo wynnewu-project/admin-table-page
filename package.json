@@ -1,6 +1,5 @@
 {
   "name": "vue3-config-table",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "files": [
@@ -9,12 +8,14 @@
   "main": "lib/vue3-config-table.umd.cjs",
   "module": "lib/vue3-config-table.js",
   "exports": {
-    "./src/index": "./src/index",
+    "./src/index": "./src/index.js",
+    "./lib/style.css": "./lib/style.css",
     ".": {
       "import": "./lib/vue3-config-table.js",
       "require": "./lib/vue3-config-table.umd.cjs"
     }
   },
+  "repository": "https://github.com/wynnewu-project/vue3-config-table.git",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -26,6 +27,7 @@
     "@vitejs/plugin-vue": "^3.2.0",
     "element-plus": "^2.2.25",
     "lodash": "^4.17.21",
+    "rollup-plugin-visualizer": "^5.8.3",
     "sass": "^1.56.1",
     "unplugin-auto-import": "^0.12.0",
     "unplugin-vue-components": "^0.22.11",

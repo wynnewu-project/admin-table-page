@@ -20,6 +20,8 @@
       ref="tableRef"
       v-loading="loading"
       :highlight-current-row="selectable === 'single'"
+      :row-key="rowKey"
+      table-layout="auto"
       @current-change="handleSelectionChange"
       @selection-change="handleSelectionChange"
       :header-cell-style="{
@@ -27,7 +29,7 @@
       }"
       border
       :data=tableData
-      v-bind="elTable"
+      v-bind="elTableProps"
     > 
       <el-table-column type="index" width="50" v-if="showIndex"/>
       <el-table-column type="selection" width="50" reserve-selection v-if="selectable === 'multiple'"/>
@@ -46,7 +48,7 @@
         </el-table-column>
       </template>
       <el-table-column 
-        v-if="$slots.actions || actionColumn"
+        v-if="$slots.actions || actionColumn.length"
         prop="actions"
         align="center"
         :label="actionColumnLabel ?? t('label.actionColumn')"
@@ -61,6 +63,7 @@
               <el-button 
                 type="primary" 
                 link 
+                size="small"
                 @click="() => action.onClick(row)"
               >{{action.text}}</el-button>
             </template>
@@ -76,25 +79,27 @@
         @size-change="getTableData"
         @current-change="getTableData"
         :total="total"
-        v-bind="elPagination"
+        v-bind="elPaginationProps"
       />
     </div>
   </el-card>
 </template>
 
 <script setup> 
+//import { ElTable, ElPagination, ElCard, ElTableColumn, ElButton, ElDivider } from "element-plus";
 import ConfigTableTool from "../table-tool/ConfigTableTool.vue";
 import CtSearch from "../table-search/CTSearch.vue";
 
-import { computed, onMounted, onUnmounted, provide, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
 import useMediaQuery from "../utils/useMediaQuery";
-import { filter, isNull, isString, omitBy, slice, isEmpty } from "lodash/fp";
+import { filter, isNull, isString, omitBy, slice } from "lodash/fp";
 import { useLocale } from "../locals/useLocale";
 import { debounce } from "lodash";
 
 const props = defineProps(tableProps);
 const emits = defineEmits(["selectChange"]);
+console.log('props', props)
 
 const tableRef = ref();
 const tableData = ref([]);
@@ -104,7 +109,7 @@ const { breakpoint } = useMediaQuery();
 const { t } = useLocale(computed(()=>props.locale))
 let timer = null;
 const loading = ref(false);
-const selectedRows = ref();
+const selectedRows = ref([]);
 
 
 
@@ -118,8 +123,8 @@ const offset = computed(() => {
 const query = ref({});
 const queryChange = ref(false);
 
-[...props.searchFields,  ...props.hiddenSearchFields].forEach(field => {
-  query.value[field.name] = field.default ?? null
+[...props.searchFields,  ...props.hiddenSearchFields].forEach(({ name, defaultValue })=> {
+    query.value[name] = defaultValue ?? null
 })
 
 
@@ -201,8 +206,12 @@ const handlePauseAutoRefresh = () => {
 }
 
 const handleSelectionChange = (selectRows) => {
-  selectedRows.value = selectRows;
-  emits("selectChange", selectRows)
+  selectedRows.value = selectRows ?? [];
+  emits("selectChange", selectedRows.value)
+}
+
+const handleClearSelection = () => {
+  tableRef.value.clearSelection()
 }
 
 onMounted(() => {
@@ -217,7 +226,9 @@ onUnmounted(() => {
 })
 
 defineExpose({
-  reload: getTableData
+  reload: getTableData,
+  getSelections: () => { return selectedRows.value },
+  clearSelection: handleClearSelection
 })
 
 </script>
