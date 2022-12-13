@@ -1,8 +1,8 @@
-import ConfigTable from "./table/ConfigTable.vue";
+import AdminTablePage from "./table/AdminTablePage.vue";
 
-export { ConfigTable };
+export { AdminTablePage };
 
-const components = [ConfigTable];
+const components = [AdminTablePage];
 
 const install = (App) => {
   components.forEach( item => {

@@ -8,7 +8,7 @@
       :label="label"
       :prop="name"
     >
-      <ct-search-item
+      <atp-search-item
         v-model="query[name]"
         :search-type="searchType"
         v-bind="field"
@@ -19,7 +19,7 @@
 
 <script setup>
 import { inject } from 'vue';
-import CtSearchItem from "./CTSearchItem.vue";
+import AtpSearchItem from "./ATPSearchItem.vue";
 
 defineProps({
   colBreakpoint: Object,

@@ -7,12 +7,12 @@
       :label-position="breakpoint === 'xs' ? 'top': 'right'"
     >
       <el-row :gutter="24">
-        <ct-search-render 
+        <atp-search-render
           :search-fields="showFields"
           :col-breakpoint="colBp"
         />
         <template v-if="showHidden && hiddenFields.length"> 
-          <ct-search-render 
+          <atp-search-render
             :search-fields="hiddenFields"
             :col-breakpoint="colBp"
           />
@@ -41,7 +41,7 @@
 
 <script setup> 
 
-import CtSearchRender from "./CTSearchRender.vue";
+import AtpSearchRender from "./ATPSearchRender.vue";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 
 import { computed, inject, ref } from "vue";

@@ -1,5 +1,5 @@
-# Vue3 Config Table
-A configurable table component based on Vue3.js and Element-plus
+# Admin Table Page
+A Admin Table Page component based on Vue3.js and Element-plus
 
 - Write a table page with search fields, toolbar and pagination functions by simple configure
 - Support Chinese and English language
@@ -8,17 +8,17 @@ A configurable table component based on Vue3.js and Element-plus
 ## Installation
 ### NPM
 ```shell
-npm install vue3-config-table
+npm install admin-table-page
 ```
 ### Yarn
 ```shell
-yarn add vue3-config-table
+yarn add admin-table-page
 ```
 ## Usage
 ### Global Scope
 ```javascript
-import ConfigTable from "vue3-config-table";
-import "vue3-config-table/lib/style.css";
+import AdminTablePage from "admin-table-page";
+import "admin-table-page/lib/style.css";
 import { createApp } from "vue";
 
 const app = createApp(...);
@@ -27,7 +27,7 @@ app.use(ConfigTable);
 ### VUE SFC Component
 ```javascript
 <template> 
-  <config-table 
+  <admin-table-page
     :columns="columns"
     :fetch-method="getDataApi"
     :tool-buttons="toolButtons"
@@ -42,8 +42,8 @@ app.use(ConfigTable);
 </template>
 
 <script setup>
-import { ConfigTable } from "vue3-config-table";
-import "vue3-config-table/lib/style.css";
+import { AdminTablePage } from "admin-table-page";
+import "admin-table-page/lib/style.css";
 import { getDataApi } from "@/api/data";
 
 const columns = [{

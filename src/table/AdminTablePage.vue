@@ -1,6 +1,6 @@
 <template> 
   <slot name="search">
-    <ct-search
+    <atp-search
       v-if="searchFields.length || hiddenSearchFields.length"
       :showFields="searchFields"
       :hiddenFields="hiddenSearchFields"
@@ -8,7 +8,7 @@
   </slot>
   <el-card> 
     <slot name="tools">
-      <config-table-tool 
+      <atp-tool
         :buttons="toolButtons"
         :refresh="refresh"
         @auto-refresh="handleAutoRefresh"
@@ -87,8 +87,8 @@
 
 <script setup> 
 //import { ElTable, ElPagination, ElCard, ElTableColumn, ElButton, ElDivider } from "element-plus";
-import ConfigTableTool from "../table-tool/ConfigTableTool.vue";
-import CtSearch from "../table-search/CTSearch.vue";
+import AtpTool from "../table-tool/ATPTool.vue";
+import AtpSearch from "../table-search/ATPSearch.vue";
 
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
