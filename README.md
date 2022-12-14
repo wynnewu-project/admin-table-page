@@ -1,5 +1,5 @@
 # Admin Table Page
-A Admin Table Page component based on Vue3.js and Element-plus
+Admin Table Page component based on Vue3.js and Element-plus
 
 - Write a table page with search fields, toolbar and pagination functions by simple configure
 - Support Chinese and English language
@@ -18,7 +18,12 @@ yarn add admin-table-page
 ### Global Scope
 ```javascript
 import AdminTablePage from "admin-table-page";
+// Only one of the following two style files needs to be imported
+// If you don't want to change the theme of element-plus
 import "admin-table-page/lib/style.css";
+// If you custom your element-plus theme
+import "admin-table-page/style/index.scss";
+
 import { createApp } from "vue";
 
 const app = createApp(...);
@@ -43,7 +48,11 @@ app.use(ConfigTable);
 
 <script setup>
 import { AdminTablePage } from "admin-table-page";
+// Only one of the following two style files needs to be imported
+// If you don't want to change the theme of element-plus
 import "admin-table-page/lib/style.css";
+// If you custom your element-plus theme
+import "admin-table-page/style/index.scss";
 import { getDataApi } from "@/api/data";
 
 const columns = [{

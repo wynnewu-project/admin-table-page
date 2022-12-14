@@ -1,6 +1,6 @@
 {
   "name": "admin-table-page",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "files": [
     "lib"
@@ -8,7 +8,7 @@
   "main": "lib/admin-table-page.umd.cjs",
   "module": "lib/admin-table-page.js",
   "exports": {
-    "./src/index": "./src/index.js",
+    "./style/index.scss": "./style/index.scss",
     "./lib/style.css": "./lib/style.css",
     ".": {
       "import": "./lib/admin-table-page.js",

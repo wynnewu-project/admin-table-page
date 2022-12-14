@@ -1,4 +1,5 @@
 <template> 
+  <el-config-provider :locale="configLocale">
   <slot name="search">
     <atp-search
       v-if="searchFields.length || hiddenSearchFields.length"
@@ -83,12 +84,15 @@
       />
     </div>
   </el-card>
+  </el-config-provider>
 </template>
 
 <script setup> 
 //import { ElTable, ElPagination, ElCard, ElTableColumn, ElButton, ElDivider } from "element-plus";
 import AtpTool from "../table-tool/ATPTool.vue";
 import AtpSearch from "../table-search/ATPSearch.vue";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
+import en from "element-plus/lib/locale/lang/en";
 
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
@@ -100,6 +104,10 @@ import { debounce } from "lodash";
 const props = defineProps(tableProps);
 const emits = defineEmits(["selectChange"]);
 console.log('props', props)
+
+const configLocale = computed(() => {
+  return props.locale === "zhCn" ? zhCn : en;
+}) 
 
 const tableRef = ref();
 const tableData = ref([]);
@@ -233,20 +241,6 @@ defineExpose({
 
 </script>
 
-<style scoped lang="scss"> 
-.search-item {
-  display: flex;
-  align-items: center;
-  &-label {
-    min-width: 100px;
-  }
-}
-
-.table-pagination {
-  margin-top: 8px;
-  overflow: hidden;
-  >* {
-    float: right;
-  }
-}
+<style lang="scss">
+@use "../../style/atp-table.scss";
 </style>

@@ -10,19 +10,21 @@
       >{{ text }}</el-button>
     </div>
     <div class="button-tool-default">
-      <el-button-group>
-        <el-tooltip :content="t('button.refresh')" v-if="refresh === 'manual'" placement="top" >
-          <el-button :icon="RefreshRight" @click="handleManualRefresh"/>
-        </el-tooltip>
-        <template v-if="typeof(refresh) === 'number'">
-          <el-tooltip :content="t('button.autoRefresh')" placement="top" v-if="paused">
-            <el-button :icon="Refresh" @click="handleAutoRefresh"/> 
+      <template v-if="fetchMethod">
+        <el-button-group>
+          <el-tooltip :content="t('button.refresh')" v-if="refresh === 'manual'" placement="top" >
+            <el-button :icon="RefreshRight" @click="handleManualRefresh"/>
           </el-tooltip>
-          <el-tooltip :content="t('button.pauseRefresh')" placement="top" v-else>
-            <el-button :icon="VideoPause" @click="handlePauseAutoRefresh"/> 
-          </el-tooltip>
-        </template>
-      </el-button-group>
+          <template v-if="typeof(refresh) === 'number'">
+            <el-tooltip :content="t('button.autoRefresh')" placement="top" v-if="paused">
+              <el-button :icon="Refresh" @click="handleAutoRefresh"/> 
+            </el-tooltip>
+            <el-tooltip :content="t('button.pauseRefresh')" placement="top" v-else>
+              <el-button :icon="VideoPause" @click="handlePauseAutoRefresh"/> 
+            </el-tooltip>
+          </template>
+        </el-button-group>
+      </template>
     </div>
   </div>
 </template>
@@ -70,17 +72,6 @@ const handlePauseAutoRefresh = () => {
 
 </script>
 
-<style scoped lang="scss"> 
-.button-tool {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  @media screen and (max-width: 767px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  > * {
-    margin-bottom: 8px;
-  }
-}
+<style lang="scss">
+@use "../../style/atp-table-tool.scss";
 </style>
