@@ -1,5 +1,28 @@
 // Element Plus Component
-@use "element-plus/theme-chalk/src/index.scss";
+@use "element-plus/theme-chalk/src/button.scss";
+@use "element-plus/theme-chalk/src/button-group.scss";
+@use "element-plus/theme-chalk/src/card.scss";
+@use "element-plus/theme-chalk/src/checkbox.scss";
+@use "element-plus/theme-chalk/src/col.scss";
+@use "element-plus/theme-chalk/src/date-picker.scss";
+@use "element-plus/theme-chalk/src/divider.scss";
+@use "element-plus/theme-chalk/src/empty.scss";
+@use "element-plus/theme-chalk/src/form.scss";
+@use "element-plus/theme-chalk/src/form-item.scss";
+@use "element-plus/theme-chalk/src/icon.scss";
+@use "element-plus/theme-chalk/src/input.scss";
+@use "element-plus/theme-chalk/src/loading.scss";
+@use "element-plus/theme-chalk/src/option.scss";
+@use "element-plus/theme-chalk/src/option-item.scss";
+@use "element-plus/theme-chalk/src/option-group.scss";
+@use "element-plus/theme-chalk/src/pagination.scss";
+@use "element-plus/theme-chalk/src/popper.scss";
+@use "element-plus/theme-chalk/src/row.scss";
+@use "element-plus/theme-chalk/src/scrollbar.scss";
+@use "element-plus/theme-chalk/src/select.scss";
+@use "element-plus/theme-chalk/src/table.scss";
+@use "element-plus/theme-chalk/src/table-column.scss";
+@use "element-plus/theme-chalk/src/tooltip.scss";
 
 //Admin Table Page
 @use "./atp-table.scss";
