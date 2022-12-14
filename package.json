@@ -1,9 +1,10 @@
 {
   "name": "admin-table-page",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "files": [
-    "lib"
+    "lib",
+    "style"
   ],
   "main": "lib/admin-table-page.umd.cjs",
   "module": "lib/admin-table-page.js",
