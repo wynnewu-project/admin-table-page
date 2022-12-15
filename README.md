@@ -1,10 +1,19 @@
 # Admin Table Page
+[Chinese](./README.zh.md)
+
 Admin Table Page component based on Vue3.js and Element-plus
 
 - Write a table page with search fields, toolbar and pagination functions by simple configure
 - Support Chinese and English language
 - Adaptive layout for different device
 - When search fields or pagination changed, the table datas will be loaded automatically
+
+## Local Demo
+```shell
+npm install / yarn install
+npm run dev / yarn run dev
+```
+Open http://localhost:8173 to see the demo
 
 ## Installation
 ### NPM
@@ -97,8 +106,8 @@ const hiddenSearchFields = [{
 | columns | The defination of the table's columns | Array | - | [] |
 | data | The local table data, same as ElTalbe | Array | - | [] |
 | fetch-method | The method to get the table data from remote server |(query: Object) => Promise<{TotalKey: Number, listKey: Array}> | - | - |
-| refresh | How to refresh the table data | String/Number | String value:<br/>"never" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> Number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "" |
-| tool-buttons | Toolbar buttons | Array | - | - |
+| refresh | How to refresh the table data | String/Number | String value:<br/>"" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> Number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "" |
+| tool-buttons | Toolbar buttons. [Toolbar button Attributes](#toolbar-buttons) | Array | - | - |
 | search-fields | Search fields displayed by default | Array | - | - |
 | hidden-search-fields | Search fields hidden by default. Click "Expand/Collapse" button to toggle the display status. | Array | - | - |
 | show-index | Display the index of the row when it's  true. | Boolean | false<br/> true | false |
@@ -137,7 +146,7 @@ const hiddenSearchFields = [{
 | text | true | The text displayed on the button. |
 | onClick | true | The callback function for click events. |
 
-In addition, all attributes for el-table-column are supported. For example,
+In addition, all attributes for el-button are supported. For example,
 ```javascript
 const toolButtons = [{
   text: "test button",
