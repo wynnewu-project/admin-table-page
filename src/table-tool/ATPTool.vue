@@ -10,7 +10,7 @@
       >{{ text }}</el-button>
     </div>
     <div class="button-tool-default">
-      <template v-if="fetchMethod">
+      <template v-if="refresh">
         <el-button-group>
           <el-tooltip :content="t('button.refresh')" v-if="refresh === 'manual'" placement="top" >
             <el-button :icon="RefreshRight" @click="handleManualRefresh"/>
@@ -41,7 +41,7 @@ defineProps({
   },
   refresh: {
     type: [ String, Number ],
-    default: "manual"
+    default: ""
   }
 })
 

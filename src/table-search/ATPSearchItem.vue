@@ -13,7 +13,7 @@
   </el-select>
   <el-date-picker 
     v-else-if="searchType === 'date'" 
-    value-format="YYYY-MM-DD hh:mm:ss"
+    value-format="YYYY-MM-DD"
     style="width: 100%"
   />
   <el-input v-else clearable/>

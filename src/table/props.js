@@ -4,7 +4,10 @@ export default {
     default: [],
     required: true
   },
-  locale: String,
+  locale: {
+    type: String,
+    default: "zhCn"
+  },
   showIndex: {
     type: Boolean,
     default: false
@@ -16,7 +19,7 @@ export default {
   fetchMethod: Function,
   refresh: {
     type: [Number, String],
-    default: "manual"
+    default: ""
   },
   searchFields: {
     type: Array,

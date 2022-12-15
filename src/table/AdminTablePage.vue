@@ -97,13 +97,12 @@ import en from "element-plus/lib/locale/lang/en";
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
 import useMediaQuery from "../utils/useMediaQuery";
-import { filter, isNull, isString, omitBy, slice } from "lodash/fp";
+import { filter, isNull, isString, omitBy, slice, isArray } from "lodash/fp";
 import { useLocale } from "../locals/useLocale";
 import { debounce } from "lodash";
 
 const props = defineProps(tableProps);
 const emits = defineEmits(["selectChange"]);
-console.log('props', props)
 
 const configLocale = computed(() => {
   return props.locale === "zhCn" ? zhCn : en;
@@ -140,10 +139,11 @@ provide("breakpoint", breakpoint);
 provide("query",  query);
 provide("translate", t);
 
-const fetchRemoteData = async () => {
+const fetchRemoteData = async (params) => {
   const finalQuery = {
     ...query.value,
     ...props.extraQuery,
+    ...params,
     page: page.value,
     offset: offset.value,
     limit: limit.value
@@ -153,14 +153,15 @@ const fetchRemoteData = async () => {
   tableData.value = res[props.listKey] ?? [];
 }
 
-const filterLocalData = () => {
-  if(queryChange.value) {
+const filterLocalData = (params) => {
+  if(queryChange.value || params ) {
     console.log('query', query.value)
     const filterParams = omitBy((value) => {
-      return isNull(value) || value === "" 
+      return isNull(value) || value === "" || !value.length 
     })({
       ...query.value,
-      ...props.extraQuery
+      ...props.extraQuery,
+      ...params
     });
     filteredData.value = filter((o) => {
       let filter = true;
@@ -168,6 +169,8 @@ const filterLocalData = () => {
         if(isString(value)) {
           const testStr = new RegExp(value+'');
           filter = testStr.test(o[key]);
+        } else if(isArray(value)){
+          filter = value.includes(o[key]);
         } else {
           filter = value === o[key];
         }
@@ -183,12 +186,12 @@ const filterLocalData = () => {
 }
 
 
-const getTableData = () => {
+const getTableData = (params) => {
   loading.value = true;
   if(props.data && !props.fetchMethod) {
-    filterLocalData();
+    filterLocalData(params);
   } else {
-    fetchRemoteData();
+    fetchRemoteData(params);
   }
   loading.value = false;
 }

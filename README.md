@@ -4,6 +4,7 @@ Admin Table Page component based on Vue3.js and Element-plus
 - Write a table page with search fields, toolbar and pagination functions by simple configure
 - Support Chinese and English language
 - Adaptive layout for different device
+- When search fields or pagination changed, the table datas will be loaded automatically
 
 ## Installation
 ### NPM
@@ -96,16 +97,16 @@ const hiddenSearchFields = [{
 | columns | The defination of the table's columns | Array | - | [] |
 | data | The local table data, same as ElTalbe | Array | - | [] |
 | fetch-method | The method to get the table data from remote server |(query: Object) => Promise<{TotalKey: Number, listKey: Array}> | - | - |
-| refresh | How to refresh the table data | String/Number | String value:<br/>"never" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> Number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "manual" |
+| refresh | How to refresh the table data | String/Number | String value:<br/>"never" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> Number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "" |
 | tool-buttons | Toolbar buttons | Array | - | - |
 | search-fields | Search fields displayed by default | Array | - | - |
-| hidden-search-fields | Search fields hidden by default. Click "Expand/Collapse" button to toggle the    display status. | Array | - | - |
+| hidden-search-fields | Search fields hidden by default. Click "Expand/Collapse" button to toggle the display status. | Array | - | - |
 | show-index | Display the index of the row when it's  true. | Boolean | false<br/> true | false |
 | row-key | Same as el-table, it's required when set selectable to "single" or "multiple" | String | - | - |
 | selectable | How to select the rows in table. | Boolean/String | String value:<br/> "single" - single select<br/> "multiple" - multiple select<br/> Boolean value:<br/> false: not suppor selection | false |
-| locale | i18n locale config | String | "zhCn", "en" | "zhCn" |
+| locale | i18n locale config | String | "zhCn", "en" | "en" |
 | action-column | The action column shown in each row. | Array | - | - |
-| action-column-label | The label of action column | String | - | en - "Action"<br/> zhCn - "操作" |
+| action-column-label | The label of action column | String | - | en - "Actions"<br/> zhCn - "操作" |
 | total-key | To map the key for total count in the result when fetch datas from remote. | String | - | "total" |
 | list-key | To map the key for data list in the result when fetch datas from remote. | String | - | "list" |
 | extra-query | The extra query params need to send to server when fetch datas from remote. | Object | - | - |
@@ -115,7 +116,7 @@ const hiddenSearchFields = [{
 ## Method
 | Function | Description | Type |
 | --- | --- | --- |
-| reload | Reload the table data | () => void |
+| reload | Reload the table data. You can pass other parameters besides searchFields and pagination parameters| (params) => void |
 
 ## Events
 | Event | Description | Parameters |
@@ -128,7 +129,7 @@ const hiddenSearchFields = [{
 | search | The search  |
 | tools | The toolbar |
 | actions | The action column |
-| [column.prop] | Each column can be customed by slot with named by the column's prop |
+| [column.prop] | Each column can be customed by slot named with the column's prop |
 
 ## Toolbar Buttons
 | Attributes | Required | Description |
@@ -147,7 +148,7 @@ const toolButtons = [{
 }]
 ```
 ## Search Fields
-Only support el-input、el-select and el-date-picker for search components.
+Only support el-input、el-select and el-date-picker(type="date") for search components.
 Same as hidden-search-fieles.
 
 | Attributes | Required | Description | Accepted Value | Default |
@@ -156,4 +157,12 @@ Same as hidden-search-fieles.
 | label | false | The label for the search field. | - | - |
 | searchType | false | The type of the search field. | "input"<br/> "select"<br/> "date" | "input" |
 | options | false | The select options. It's required when searchType is "select". The element  for options Array can be String、Number and Object with keys named label and value. | ["options1", "options2",...]<br/> or<br/> [{ label: "option1", value: "option1" }] | - |
+
+In addition, all attributes for el-input/el-select/el-date-picker(type="date") are supported. For example,
+```javascript
+const searchFields = [{
+  name: "username",
+  type: "textarea"
+}]
+```
 
