@@ -3,6 +3,7 @@
     v-if="searchType === 'select'" 
     clearable
     style="width: 100%"
+    :placeholder="t('placeholder.select')"
   >
     <el-option 
       v-for="option in selectOptions"
@@ -20,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 
  
 const props = defineProps({
@@ -34,6 +35,8 @@ const props = defineProps({
     default: []
   }
 })
+
+const t = inject("translate");
 
 const selectOptions = computed(()=> 
   props.options.map(op => {

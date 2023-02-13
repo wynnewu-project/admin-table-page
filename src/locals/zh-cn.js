@@ -10,5 +10,8 @@ export default {
   },
   label: {
     actionColumn: "操作"
+  },
+  placeholder: {
+    select: "请选择"
   }
 }

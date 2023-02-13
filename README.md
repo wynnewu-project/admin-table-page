@@ -113,7 +113,7 @@ const hiddenSearchFields = [{
 | show-index | Display the index of the row when it's  true. | Boolean | false<br/> true | false |
 | row-key | Same as el-table, it's required when set selectable to "single" or "multiple" | String | - | - |
 | selectable | How to select the rows in table. | Boolean/String | String value:<br/> "single" - single select<br/> "multiple" - multiple select<br/> Boolean value:<br/> false: not suppor selection | false |
-| locale | i18n locale config | String | "zhCn", "en" | "en" |
+| locale | i18n locale config | String | "zhCn", "en" | "zhCn" |
 | action-column | The action column shown in each row. | Array | - | - |
 | action-column-label | The label of action column | String | - | en - "Actions"<br/> zhCn - "操作" |
 | total-key | To map the key for total count in the result when fetch datas from remote. | String | - | "total" |
@@ -121,11 +121,14 @@ const hiddenSearchFields = [{
 | extra-query | The extra query params need to send to server when fetch datas from remote. | Object | - | - |
 | el-table-props | Other el-table Attributes. | Object | - | - |
 | el-pagination-props | Other el-pagination Attributes | Object | - | - |
+| tips | tips string for the table. | String | - | - |
 
 ## Method
 | Function | Description | Type |
 | --- | --- | --- |
 | reload | Reload the table data. You can pass other parameters besides searchFields and pagination parameters| (params) => void |
+| getSelections | Return the selected rows or seleted row object | () => Array or Object |
+| clearSelection | Clear the selection | () => void |
 
 ## Events
 | Event | Description | Parameters |
@@ -138,13 +141,15 @@ const hiddenSearchFields = [{
 | search | The search  |
 | tools | The toolbar |
 | actions | The action column |
+| tips | The tips of the table |
 | [column.prop] | Each column can be customed by slot named with the column's prop |
 
 ## Toolbar Buttons
-| Attributes | Required | Description |
-| --- | --- | --- |
-| text | true | The text displayed on the button. |
-| onClick | true | The callback function for click events. |
+| Attributes | Required | Description | Type | Default Value |
+| --- | --- | --- | --- | --- |
+| text | true | The text displayed on the button. | String | - |
+| onClick | true | The callback function for click events. | Function | - |
+| show | false | Whether to display the button. Default is true. | Boolean | true |
 
 In addition, all attributes for el-button are supported. For example,
 ```javascript

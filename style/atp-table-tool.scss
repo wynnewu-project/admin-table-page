@@ -1,6 +1,5 @@
-.button-tool {
+.button-tool, .button-tool-custom {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   @media screen and (max-width: 767px) {
     flex-direction: column;
@@ -9,4 +8,20 @@
   > * {
     margin-bottom: 8px;
   }
+}
+
+.button-tool {
+  justify-content: space-between;
+}
+
+.button-tool-custom {
+    @media screen and (max-width: 464px) {
+      width: 100%;
+      > * {
+        width: 100%;
+      }
+      .el-button + .el-button {
+        margin-left: 0px;
+      }
+    }
 }

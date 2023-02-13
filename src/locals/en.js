@@ -10,5 +10,8 @@ export default {
   },
   label: {
     actionColumn: "Actions"
+  },
+  placeholder: {
+    select: "Select"
   }
 }

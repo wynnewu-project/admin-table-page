@@ -1,13 +1,14 @@
 <template> 
   <div class="button-tool"> 
     <div class="button-tool-custom">
-      <el-button 
-        v-for="{ text, onClick, ...btn} in buttons"
-        :key="text"
-        type="primary"
-        @click="onClick"
-        v-bind="btn"
-      >{{ text }}</el-button>
+      <template v-for="{ text, onClick, show=true, ...btn} in buttons" :key="text">
+        <el-button 
+          v-if="show"
+          type="primary"
+          @click="onClick"
+          v-bind="btn"
+        >{{ text }}</el-button>
+      </template>
     </div>
     <div class="button-tool-default">
       <template v-if="refresh">

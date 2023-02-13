@@ -42,6 +42,9 @@ const router = createRouter({
     }, {
       path: "/slot",
       component: () => import("../views/SlotConfig.vue")
+    }, {
+      path: "/tips",
+      component: () => import("../views/Tips.vue")
     }]
   }]
 })

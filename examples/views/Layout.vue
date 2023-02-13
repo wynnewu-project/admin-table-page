@@ -13,6 +13,7 @@
         <el-menu-item index="/showIndex"> 显示行序号</el-menu-item>
         <el-menu-item index="/actionColumn"> 操作列 </el-menu-item>
         <el-menu-item index="/langSwitch"> 语言切换</el-menu-item>
+        <el-menu-item index="/tips">Tips</el-menu-item>
         <el-menu-item index="/slot"> slot自定义</el-menu-item>
       </el-menu>
     </el-aside>

@@ -56,11 +56,11 @@ export const toolButtons = [{
 export const data = [{
   username: "user1",
   age: "18",
-  lastLogin: "2022-02-02"
+  lastLogin: "2023-01-03"
 }, {
   username: "user2",
   age: "19",
-  lastLogin: "2022-01-01"
+  lastLogin: "2023-01-02"
 }]
 
 /**
@@ -71,7 +71,10 @@ export const data = [{
  * 
  */
 export const fetchMethod = (query) => {
-  ElMessage.info("fetch data from remote")
+  ElMessage.info({
+    message: "fetch data from remote",
+    offset: 550
+  })
   return new Promise((resolve, reject) => {
     resolve({
       total: 207,

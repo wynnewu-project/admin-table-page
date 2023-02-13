@@ -64,5 +64,6 @@ export default {
   elPaginationProps: {
     type: Object,
     default: {}
-  }
+  },
+  tips: String
 }

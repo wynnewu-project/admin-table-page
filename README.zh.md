@@ -113,7 +113,7 @@ const hiddenSearchFields = [{
 | show-index | 显示行序号 | Boolean | false<br/> true | false |
 | row-key | 同el-table的row-key属性。如果需要对表格数据进行多选或单选，必须设置该属性。 | String | - | - |
 | selectable | 如何选择表格数据 | Boolean/String | String value:<br/> "single" - 单选某一行数据 <br/> "multiple" - 选择多行数据 <br/> Boolean value:<br/> false: 不可选择表格数据 | false |
-| locale | i18n国际化设置，目前仅支持中/英文切换 | String | "zhCn", "en" | "en" |
+| locale | i18n国际化设置，目前仅支持中/英文切换 | String | "zhCn", "en" | "zhCn" |
 | action-column | 每一行的操作列里显示的操作按钮列表。每一个操作按钮对象仅需传入{text, onClick}。onClick函数的参数是当前行对象。如果需要其他样式，可通过name为“actions”的slot自定义 | Array | - | - |
 | action-column-label | 操作列的列名 | String | - | en - "Actions"<br/> zhCn - "操作" |
 | total-key | 远程获取数据时，如果服务端返回的数据总行数的key不是”total“，则需要设置该属性来指明服务端返回的key。 | String | - | "total" |
@@ -121,11 +121,14 @@ const hiddenSearchFields = [{
 | extra-query | 远程获取数据时，除字段搜索和分页信息，额外需要传给服务端的参数。注意：不会监听这个对象的变化，如果需要，可以在项目中自行监听变化并调用组件提供的reload方法 | Object | - | - |
 | el-table-props | 其他el-table属性 | Object | - | - |
 | el-pagination-props | 其他el-pagination属性 | Object | - | - |
+| tips | 提示信息 | String | - | - |
 
 ## 方法 
 | Function | Description | Type |
 | --- | --- | --- |
 | reload | 重新加载表格数据。支持传入一个除搜索字段、分页以及extra-query属性以外的参数对象。 | (params) => void |
+| getSelections | 返回选择的行。单选返回对象，多选返回列表 | () => Array or Object |
+| clearSelection | 清除行选择 | () => void |
 
 ## 事件 
 | Event | Description | Parameters |
@@ -138,13 +141,15 @@ const hiddenSearchFields = [{
 | search | 搜索域。此时组件不会响应自定义搜索域的变化。需要自行监听搜索域变化，并调用reloada方法做筛选 |
 | tools | 工具栏 |
 | actions | 操作列 |
-| [column.prop] | 每一列可通过一个与该列prop属性同名的具名slot进行自定义 |
+| tips | 提示信息 |
+| [column.prop] | 除操作列外，每一列都可通过一个与该列prop属性同名的具名slot进行自定义 |
 
 ## 工具栏按钮对象
-| Attributes | Required | Description |
-| --- | --- | --- |
-| text | true | 按钮文案 |
-| onClick | true | click事件的回调函数 |
+| Attributes | Required | Description | Type | Default Value |
+| --- | --- | --- | --- | --- |
+| text | true | 按钮文案 | String | - |
+| onClick | true | click事件的回调函数 | Function | - |
+| show | false | 是否显示按钮 | Boolean | true |
 
 除此之外，还支持el-button的所有属性。例如，
 ```javascript

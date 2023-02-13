@@ -17,6 +17,15 @@
         @pause-auto-refresh="handlePauseAutoRefresh"
       />
     </slot>
+    <slot name="tips">
+      <el-alert 
+        v-if="tips" 
+        :title="tips" 
+        type="success" 
+        :closable="false"
+        style="margin-bottom: 8px"
+      />
+    </slot>
     <el-table
       ref="tableRef"
       v-loading="loading"
@@ -57,16 +66,18 @@
         <template #default="{ row }">
           <slot name="actions" :row="row">
             <template 
-              v-for="(action, index) in actionColumn"
-              :key="action.text"
+              v-for="({text, show=true, onClick}, index) in actionColumn"
+              :key="text"
             > 
-              <el-divider direction="vertical" v-if="index" class="hidden-xs-only"/>
-              <el-button 
-                type="primary" 
-                link 
-                size="small"
-                @click="() => action.onClick(row)"
-              >{{action.text}}</el-button>
+              <template v-if="show">
+                <el-divider direction="vertical" v-if="index" class="hidden-xs-only"/>
+                <el-button 
+                  type="primary" 
+                  link 
+                  size="small"
+                  @click="() => onClick(row)"
+                >{{text}}</el-button>
+              </template>
             </template>
           </slot>
         </template>
