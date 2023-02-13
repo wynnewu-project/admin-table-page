@@ -1,6 +1,6 @@
 {
   "name": "admin-table-page",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "type": "module",
   "description": "An admin table page component based on vue3 and element-plus",
   "keywords": [
