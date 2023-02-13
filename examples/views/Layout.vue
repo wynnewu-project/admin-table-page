@@ -14,6 +14,7 @@
         <el-menu-item index="/actionColumn"> 操作列 </el-menu-item>
         <el-menu-item index="/langSwitch"> 语言切换</el-menu-item>
         <el-menu-item index="/tips">Tips</el-menu-item>
+        <el-menu-item index="/attributes">El-table Attributes、事件和方法</el-menu-item>
         <el-menu-item index="/slot"> slot自定义</el-menu-item>
       </el-menu>
     </el-aside>

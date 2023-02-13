@@ -45,6 +45,9 @@ const router = createRouter({
     }, {
       path: "/tips",
       component: () => import("../views/Tips.vue")
+    }, {
+      path: "/attributes",
+      component: () => import("../views/attributes.vue")
     }]
   }]
 })

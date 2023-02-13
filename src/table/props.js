@@ -57,10 +57,6 @@ export default {
     type: Object,
     default: {}
   },
-  elTableProps: {
-    type: Object,
-    default: {}
-  },
   elPaginationProps: {
     type: Object,
     default: {}

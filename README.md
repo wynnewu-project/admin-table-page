@@ -119,16 +119,19 @@ const hiddenSearchFields = [{
 | total-key | To map the key for total count in the result when fetch datas from remote. | String | - | "total" |
 | list-key | To map the key for data list in the result when fetch datas from remote. | String | - | "list" |
 | extra-query | The extra query params need to send to server when fetch datas from remote. | Object | - | - |
-| el-table-props | Other el-table Attributes. | Object | - | - |
 | el-pagination-props | Other el-pagination Attributes | Object | - | - |
 | tips | tips string for the table. | String | - | - |
+
+In addition, other attributes of el-table can fallthrough.
 
 ## Method
 | Function | Description | Type |
 | --- | --- | --- |
 | reload | Reload the table data. You can pass other parameters besides searchFields and pagination parameters| (params) => void |
-| getSelections | Return the selected rows or seleted row object | () => Array or Object |
-| clearSelection | Clear the selection | () => void |
+| getSelections | Return the selected rows or seleted row object. When multiple selecting, you can get the selected rows on different pages. | () => Array or Object |
+
+In addition, all methods of el-table are alse suppored.
+
 
 ## Events
 | Event | Description | Parameters |

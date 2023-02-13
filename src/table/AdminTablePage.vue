@@ -39,7 +39,7 @@
       }"
       border
       :data=tableData
-      v-bind="elTableProps"
+      v-bind="$attrs"
     > 
       <el-table-column type="index" width="50" v-if="showIndex"/>
       <el-table-column type="selection" width="50" reserve-selection v-if="selectable === 'multiple'"/>
@@ -107,6 +107,7 @@ import en from "element-plus/lib/locale/lang/en";
 
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
+import { EL_TABLE_METHOD } from "./elTableMethod";
 import useMediaQuery from "../utils/useMediaQuery";
 import { filter, isNull, isString, omitBy, slice, isArray } from "lodash/fp";
 import { useLocale } from "../locals/useLocale";
@@ -247,10 +248,15 @@ onUnmounted(() => {
   handlePauseAutoRefresh();
 })
 
+const elMethod = {};
+EL_TABLE_METHOD.forEach(method => {
+  elMethod[method] = (...params) => tableRef.value[method].apply(null, params);
+});
+
 defineExpose({
+  ...elMethod,
   reload: getTableData,
   getSelections: () => { return selectedRows.value },
-  clearSelection: handleClearSelection
 })
 
 </script>

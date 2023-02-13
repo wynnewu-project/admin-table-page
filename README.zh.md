@@ -119,16 +119,18 @@ const hiddenSearchFields = [{
 | total-key | 远程获取数据时，如果服务端返回的数据总行数的key不是”total“，则需要设置该属性来指明服务端返回的key。 | String | - | "total" |
 | list-key | 远程获取数据时，如果服务端返回的当前页数据列表的key不是”list“，则需要设置该属性来指明服务端返回的key。  | String | - | "list" |
 | extra-query | 远程获取数据时，除字段搜索和分页信息，额外需要传给服务端的参数。注意：不会监听这个对象的变化，如果需要，可以在项目中自行监听变化并调用组件提供的reload方法 | Object | - | - |
-| el-table-props | 其他el-table属性 | Object | - | - |
 | el-pagination-props | 其他el-pagination属性 | Object | - | - |
 | tips | 提示信息 | String | - | - |
+
+除此之外，其他原el-table组件的属性也可以以透传attributes的方式配置。
 
 ## 方法 
 | Function | Description | Type |
 | --- | --- | --- |
 | reload | 重新加载表格数据。支持传入一个除搜索字段、分页以及extra-query属性以外的参数对象。 | (params) => void |
-| getSelections | 返回选择的行。单选返回对象，多选返回列表 | () => Array or Object |
-| clearSelection | 清除行选择 | () => void |
+| getSelections | 返回选择的行。单选返回对象，多选返回列表。 如果是多选模式，该方法会返回在不同页面上的选择行。 | () => Array or Object |
+
+除此之外，还支持原el-table组件的所有方法调用。
 
 ## 事件 
 | Event | Description | Parameters |
