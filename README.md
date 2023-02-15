@@ -4,9 +4,14 @@
 Admin Table Page component based on Vue3.js and Element-plus
 
 - Write a table page with search fields, toolbar and pagination functions by simple configure
+- Only need a promise function that fetchs data from the server to automatically complete the table data pulling and rendering
+- Support automatic refresh and manual refresh of the table data when fetching data from the server
+- Automatically pagination
+- Select rows on different pages even when fetching data from the server
+- When search fields or pagination changed, the table datas will be loaded automatically
+- Customize each part of the component through different named slot
 - Support Chinese and English language
 - Adaptive layout for different device
-- When search fields or pagination changed, the table datas will be loaded automatically
 
 ## Local Demo
 ```shell
