@@ -1,7 +1,10 @@
 <template>
   <el-container> 
-    <el-aside width="200px">
-      <el-menu router :default-active="activeMenu">
+    <el-aside width="300px">
+      <el-menu router :default-active="activeMenu" :default-openeds="['2']">
+        <el-menu-item index="/home">简介</el-menu-item>
+        <el-sub-menu index="2">
+          <template #title>用法示例</template>
         <el-menu-item index="/localData"> 本地数据 </el-menu-item>
         <el-menu-item index="/remoteData"> 远程数据 </el-menu-item>
         <el-menu-item index="/searchFields"> 搜索框 </el-menu-item>
@@ -16,6 +19,7 @@
         <el-menu-item index="/tips">Tips</el-menu-item>
         <el-menu-item index="/attributes">El-table Attributes、事件和方法</el-menu-item>
         <el-menu-item index="/slot"> slot自定义</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-aside>
     <el-main><router-view/></el-main>

@@ -52,17 +52,24 @@
           align="center"
           v-bind="elCol"
         > 
+          <template #header> 
+            <slot :name="`${elCol.prop}_header`">{{ elCol.label }}</slot>
+          </template>
           <template #default="{ row, column }"> 
             <slot :name="elCol.prop" :row="row" >{{ row[column.property ] }}</slot>
           </template>
         </el-table-column>
       </template>
+      <slot name="extra_columns"/>
       <el-table-column 
         v-if="$slots.actions || actionColumn.length"
         prop="actions"
         align="center"
-        :label="actionColumnLabel ?? t('label.actionColumn')"
+        v-bind="actionColumnProps"
       > 
+        <template #header>
+          <slot name="actions_header">{{actionColumnLabel ?? t('label.actionColumn')}}</slot>
+        </template>
         <template #default="{ row }">
           <slot name="actions" :row="row">
             <template 

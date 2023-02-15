@@ -41,6 +41,14 @@ export const hiddenSearchFields = [{
 
 export const toolButtons = [{
   text: "New User",
+  onClick: () => { console.log('new user')}
+}, {
+  text: "Delete",
+  onClick: () => { console.log('delete user')},
+}]
+
+export const toolButtonsEl = [{
+  text: "New User",
   icon: Plus,
   //if you import element-plus/icons-vue global, you can use string
   //icon: "Plus"  
@@ -48,10 +56,11 @@ export const toolButtons = [{
 }, {
   text: "Delete",
   icon: Delete,
-  onClick: () => { console.log('new user')},
+  onClick: () => { console.log('delete user')},
   //you can add other el-button attributes, for example:
   type: "danger"
 }]
+
 
 export const data = [{
   username: "user1",
@@ -63,6 +72,16 @@ export const data = [{
   lastLogin: "2023-01-02"
 }]
 
+export const generatorData = (min=0, max=20) => {
+  const length = Math.floor(Math.random() * (max-min +1) + min);
+  return [...Array(length)].map((_item, index) => ({
+    username: `user${index}`,
+    age: index + 1,
+    lastLogin: `2023-01-${index+1}`
+  }));
+}
+
+
 /**
  * fetchMethod -  Return a Promise. 
  * the returned table data should contain:
@@ -71,17 +90,35 @@ export const data = [{
  * 
  */
 export const fetchMethod = (query) => {
-  ElMessage.info({
+  console.log('fetch')
+  ElMessage.success({
     message: "fetch data from remote",
-    offset: 550
+    offset: 100,
   })
   return new Promise((resolve, reject) => {
+    const data = generatorData(8, 10)
     resolve({
-      total: 207,
+      total: 18,
       list: data
     })
   })
 }
+
+export const fetchMethodOtherKey = (query) => {
+  console.log('fetch')
+  ElMessage.success({
+    message: "fetch data from remote",
+    offset: 100,
+  })
+  return new Promise((resolve, reject) => {
+    const data = generatorData(8, 10)
+    resolve({
+      count: 18,
+      items: data
+    })
+  })
+}
+
 
 export const actionColumn = [{
   text: "编辑",
@@ -89,4 +126,18 @@ export const actionColumn = [{
 }, {
   text: "删除",
   onClick: () => { console.log("delete")}
+}]
+
+export const columnsWidth = [{
+  prop: "username",
+  label: "Username",
+  width: 400
+}, {
+  prop: "age",
+  label: "Age",
+  width: 400,
+}, {
+  prop: "lastLogin",
+  label: "Last Login",
+  width: 400,
 }]

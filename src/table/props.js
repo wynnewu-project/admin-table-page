@@ -42,8 +42,10 @@ export default {
     type: Array,
     default: []
   },
-  actionColumnLabel: {
-    type: String,
+  actionColumnLabel: String, 
+  actionColumnProps: {
+    type: Object,
+    default: {}
   },
   totalKey: {
     type: String,
