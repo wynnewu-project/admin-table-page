@@ -236,8 +236,10 @@ const handlePauseAutoRefresh = () => {
 }
 
 const handleSelectionChange = (selectRows) => {
-  selectedRows.value = selectRows ?? [];
-  emits("selectChange", selectedRows.value)
+  if(props.selectable !== "multiple" || Array.isArray(selectRows)){
+    selectedRows.value = selectRows ?? [];
+    emits("selectChange", selectedRows.value)
+  }
 }
 
 const handleClearSelection = () => {
