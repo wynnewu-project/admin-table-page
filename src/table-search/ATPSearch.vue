@@ -20,7 +20,7 @@
         <el-col :span="buttonColSpan" style="overflow: hidden">
           <div style="float: right">
           <el-button  @click="handleResetSearch(formRef)">
-            {{ t("button.reset")}}
+            {{ t("button.reset") }}
           </el-button>
           <template v-if="hiddenFields.length">
             <el-button link type="primary" v-if="showHidden" @click="showHidden=false">

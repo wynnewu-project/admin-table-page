@@ -3,10 +3,10 @@
     title="多选表格数据"
   >
   <ul>
-    <li>设置selectable="multiple"开启多选</li>
-    <li>必须设置row-key属性</li>
-    <li>可通过@select-change设置选择数据变化时的处理函数。函数参数为已选行列表</li>
-    <li>可通过函数getSelectionsu获取已选择的数据。无论是本地数据还是远程获取的数据，调用该函数时，跨页选择的数据也会返回</li>
+    <li class="info-list">设置属性 <strong class="red">selectable</strong> 为"multiple"开启表格数据的多选。<strong class="red">翻页后仍保留前面已选的数据</strong></li>
+    <li class="info-list">此时，必须同时设置组件属性 <strong class="red">row-key</strong> </li>
+    <li class="info-list">可通过监听组件事件 <strong class="red">@select-change</strong> 来处理选择数据变化这一事件。回调函数的参数为已选行列表</li>
+    <li class="info-list">可通过组件API <strong class="red">getSelectionsu</strong> 获取已选择的数据。无论是本地数据还是远程获取的数据，调用该函数时，跨页选择的数据也会返回</li>
   </ul>
   <p style="margin-bottom: 16px">
     已选用户： 
@@ -14,7 +14,7 @@
   </p>
   <admin-table-page
     :columns="columns"
-    :data="data"
+    :local-data="data"
     selectable="multiple"
     row-key="username"
     @select-change="handleSelectChange"

@@ -12,7 +12,7 @@ export default {
     type: Boolean,
     default: false
   },
-  data: {
+  localData: {
     type: Array,
     default: []
   },
@@ -20,14 +20,6 @@ export default {
   refresh: {
     type: [Number, String],
     default: ""
-  },
-  searchFields: {
-    type: Array,
-    default: []
-  },
-  hiddenSearchFields: {
-    type: Array,
-    default: []
   },
   toolButtons: {
     type: Array,

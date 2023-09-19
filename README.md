@@ -33,10 +33,12 @@ yarn add admin-table-page
 ### Global Scope
 ```javascript
 import AdminTablePage from "admin-table-page";
+
 // Only one of the following two style files needs to be imported
-// If you don't want to change the theme of element-plus
+
+// If you don't want to change the theme of element-plus, import like this:
 import "admin-table-page/lib/style.css";
-// If you custom your element-plus theme
+// If you custom your element-plus theme, import like this:
 import "admin-table-page/style/index.scss";
 
 import { createApp } from "vue";
@@ -51,13 +53,10 @@ app.use(ConfigTable);
     :columns="columns"
     :fetch-method="getDataApi"
     :tool-buttons="toolButtons"
-    :search-fields="searchFields"
-    :hidden-search-fields="hiddenSearchFields"
     :refresh="5000"
     :action-column="actionColumn"
-    :el-table="{
-      'row-key': 'id'
-    }"
+    selectable="multiple"
+    row-key="id"
   />
 </template>
 
@@ -68,14 +67,18 @@ import { AdminTablePage } from "admin-table-page";
 import "admin-table-page/lib/style.css";
 // If you custom your element-plus theme
 import "admin-table-page/style/index.scss";
-import { getDataApi } from "@/api/data";
 
 const columns = [{
   prop: "name",
   label: "Name",
+  filterable: true
 }, {
   prop: "age",
-  label: "Age"
+  label: "Age",
+  filterOptions: {
+    type: "select",
+    options: ["Under 10 years old", "10 to 20 years old"]
+  }
 }];
 
 const toolButtons = [{
@@ -92,40 +95,46 @@ const actionColumn = [{
   onClick: row => handleDelete(row)
 }]
 
-const searchFields = [{
-  name: "name",
-  label: "Name"
-}]
+const getDataApi = () => {
+  return new Promise((resolve, reject) => {
+    resolve({
+      total: 2,
+      list: [{
+        name: "name1",
+        age: 1
+      }, {
+        name: "name2",
+        age: 2
+      }]
+    })
+  })
+}
 
-const hiddenSearchFields = [{
-  name: "age",
-  label: "Age",
-  searchType: "select",
-  options: ["Under 10 years old", "10 to 20 years old"]
-}]
 </script>
 ```
+
+Then, you can get a page like this:
+
+![Demo](https://github.com/wynnewu-project/admin-table-page/blob/main/examples/assets/2023-09-19_2635x758.png?raw=true)
 ## Props
 | Props | Description | Type | Accepted Values | Default Value |
 | --- | --- | --- | --- | --- |
-| columns | The defination of the table's columns | Array | - | [] |
-| data | The local table data, same as ElTalbe | Array | - | [] |
-| fetch-method | The method to get the table data from remote server |(query: Object) => Promise<{TotalKey: Number, listKey: Array}> | - | - |
-| refresh | How to refresh the table data | String/Number | String value:<br/>"" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> Number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "" |
-| tool-buttons | Toolbar buttons. [Toolbar button Attributes](#toolbar-buttons) | Array | - | - |
-| search-fields | Search fields displayed by default | Array | - | - |
-| hidden-search-fields | Search fields hidden by default. Click "Expand/Collapse" button to toggle the display status. | Array | - | - |
-| show-index | Display the index of the row when it's  true. | Boolean | false<br/> true | false |
-| row-key | Same as el-table, it's required when set selectable to "single" or "multiple" | String | - | - |
-| selectable | How to select the rows in table. | Boolean/String | String value:<br/> "single" - single select<br/> "multiple" - multiple select<br/> Boolean value:<br/> false: not suppor selection | false |
-| locale | i18n locale config | String | "zhCn", "en" | "zhCn" |
-| action-column | The action column shown in each row. | Array | - | - |
-| action-column-label | The label of action column | String | - | en - "Actions"<br/> zhCn - "操作" |
-| total-key | To map the key for total count in the result when fetch datas from remote. | String | - | "total" |
-| list-key | To map the key for data list in the result when fetch datas from remote. | String | - | "list" |
-| extra-query | The extra query params need to send to server when fetch datas from remote. | Object | - | - |
-| el-pagination-props | Other el-pagination Attributes | Object | - | - |
-| tips | tips string for the table. | String | - | - |
+| columns | The defination of the table's columns. <br/>In addition to the original attributes of el-table-column, use filterable or filterOptions to define the filtering of the column [Filter](#Filter) | array | - | [] |
+| local-data | The local table data, same as ElTalbe's data property | array | - | [] |
+| total-key | To map the key for total count in the result when fetch datas from remote. | string | - | "total" |
+| list-key | To map the key for data list in the result when fetch datas from remote. | string | - | "list" |
+| fetch-method | The method to get the table data from remote server |(query: object) => Promise<{totalKey: number, listKey: array}> | - | - |
+| refresh | How to refresh the table data | string/number | string value:<br/>"" - Never to refresh Table<br/>"manual" -  Refresh table data manually"<br/> number value:<br/> Table refresh period with milliseconds. For example,:refresh="5000" | "" |
+| tool-buttons | Toolbar buttons. [Toolbar button Attributes](#toolbar-buttons) | array | - | - |
+| show-index | Display the index of the row when it's  true. | boolean | false<br/> true | false |
+| row-key | Same as el-table, it's required when set selectable to "single" or "multiple" | string | - | - |
+| selectable | How to select the rows in table. | boolean/string | string value:<br/> "single" - single select<br/> "multiple" - multiple select<br/> boolean value:<br/> false: not suppor selection | false |
+| locale | i18n locale config | string | "zhCn", "en" | "zhCn" |
+| action-column | The action column shown in each row. | array | - | - |
+| action-column-label | The label of action column | string | - | en - "Actions"<br/> zhCn - "操作" |
+| extra-query | The extra query params need to send to server when fetch datas from remote. | object | - | - |
+| el-pagination-props | Other el-pagination Attributes | object | - | - |
+| tips | tips string for the table. | string | - | - |
 
 In addition, other attributes of el-table can fallthrough.
 
@@ -133,7 +142,7 @@ In addition, other attributes of el-table can fallthrough.
 | Function | Description | Type |
 | --- | --- | --- |
 | reload | Reload the table data. You can pass other parameters besides searchFields and pagination parameters| (params) => void |
-| getSelections | Return the selected rows or seleted row object. When multiple selecting, you can get the selected rows on different pages. | () => Array or Object |
+| getSelections | Return the selected rows or seleted row object. When multiple selecting, you can get the selected rows on different pages. | () => array or object |
 
 In addition, all methods of el-table are alse suppored.
 
@@ -149,8 +158,11 @@ In addition, all methods of el-table are alse suppored.
 | search | The search  |
 | tools | The toolbar |
 | actions | The action column |
+| actions_header | The header of the action column |
 | tips | The tips of the table |
+| extra_columns | Extra customed columns |
 | [column.prop] | Each column can be customed by slot named with the column's prop |
+| [column.prop]_header | The header of column can be customed by named slot |
 
 ## Toolbar Buttons
 | Attributes | Required | Description | Type | Default Value |
@@ -169,22 +181,35 @@ const toolButtons = [{
   link
 }]
 ```
-## Search Fields
+## Filter 
 Only support el-input、el-select and el-date-picker(type="date") for search components.
-Same as hidden-search-fieles.
 
-| Attributes | Required | Description | Accepted Value | Default |
-| --- | --- | --- | --- | --- |
-| name | true | The Query param key for the field. | - | - |
-| label | false | The label for the search field. | - | - |
-| searchType | false | The type of the search field. | "input"<br/> "select"<br/> "date" | "input" |
-| options | false | The select options. It's required when searchType is "select". The element  for options Array can be String、Number and Object with keys named label and value. | ["options1", "options2",...]<br/> or<br/> [{ label: "option1", value: "option1" }] | - |
+You can set <font color=Blue>filterable</font> or <font color=Blue>filterOptions</font> for each element in the array defined by <font color=Blue>columns</font>.
+- filterable is a boolean value. You can get a el-input filter component for the column when it's true.
+- filterOptions is an object. You can set other properties for the filter component like <font color=Blue>defaultHidden</font> to set whether it's hidden by default,  or use other types of filter components we support. 
+
+### Attributes of filterOptions
+
+| Attributes | Type | Required | Description | Accepted Value | Default |
+| --- | --- | --- | --- | --- | --- |
+| type| string | false | The type of the search field. | "input"<br/> "select"<br/> "date" | "input" |
+| defaultHidden | boolean| false | Whether this filter component is hidden by default. | true<br/>false | false |
+| options | array | false | The select options. <br/>It's required when type is "select". The element  for options Array can be string、number or object with keys named label and value. | ["options1", "options2",...]<br/> or<br/> [{ label: "option1", value: "option1" }] | - |
 
 In addition, all attributes for el-input/el-select/el-date-picker(type="date") are supported. For example,
 ```javascript
-const searchFields = [{
-  name: "username",
-  type: "textarea"
+const columns = [{
+  prop: "username",
+  label: "Username",
+  filterable: true
+}, {
+  prop: "age",
+  label: "Age",
+  filterOptions:{
+    type: "select",
+    options: ["18", "19"],
+    defaultHidden: true
+  }
 }]
 ```
 

@@ -1,6 +1,8 @@
 import { Delete, Loading, Plus } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 
+export const stringColumns = [ "username", "age", "lastLogin"]
+
 export const columns = [{
   prop: "username",
   label: "Username",
@@ -10,6 +12,19 @@ export const columns = [{
 }, {
   prop: "lastLogin",
   label: "Last Login"
+}]
+
+export const filterColumns = [{
+  prop: "username",
+  label: "Username",
+  filterable: true
+}, {
+  prop: "age",
+  label: "Age",
+  filterOptions: {
+    type: "select",
+    options: ["18", "19", "20", "21", "22"]
+  }
 }]
 
 export const searchFields = [{
@@ -76,7 +91,7 @@ export const generatorData = (min=0, max=20) => {
   const length = Math.floor(Math.random() * (max-min +1) + min);
   return [...Array(length)].map((_item, index) => ({
     username: `user${index}`,
-    age: index + 1,
+    age: index + 18,
     lastLogin: `2023-01-${index+1}`
   }));
 }
@@ -89,8 +104,7 @@ export const generatorData = (min=0, max=20) => {
  *  - "list": the list of table datas, you can map another words to this key by "listKey" props
  * 
  */
-export const fetchMethod = (query) => {
-  console.log('fetch')
+export const fetchMethod = () => {
   ElMessage.success({
     message: "fetch data from remote",
     offset: 100,
@@ -98,14 +112,41 @@ export const fetchMethod = (query) => {
   return new Promise((resolve, reject) => {
     const data = generatorData(8, 10)
     resolve({
-      total: 18,
+      total: data.length,
+      list: data
+    })
+  })
+}
+
+export const fetchFilterMethod = (query) => {
+  ElMessage.success({
+    message: "fetch data from remote",
+    offset: 100,
+  })
+  return new Promise((resolve, reject) => {
+    let data = generatorData(4,4);
+    const filterFields = Object.keys(query).filter(k => !["page", "offset", "limit"].includes(k));
+    data = data.filter(d => {
+      let filter = true;
+      for(let k of filterFields) {
+        if(query[k] === null || query[k] === "" )
+          continue;
+        if(typeof d[k] === 'string') {
+          filter = d[k].includes(query[k]);
+        } else {
+          filter = d[k] === Number(query[k]);
+        }
+      }
+      return filter
+    })
+    resolve({
+      total: data.length,
       list: data
     })
   })
 }
 
 export const fetchMethodOtherKey = (query) => {
-  console.log('fetch')
   ElMessage.success({
     message: "fetch data from remote",
     offset: 100,

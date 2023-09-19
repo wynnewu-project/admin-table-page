@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main>
-      <el-scrollbar height="768px">
+      <el-scrollbar height="calc(100vh - 174px)">
         <h1 class="page-title">{{title}}</h1>
         <slot/>
       </el-scrollbar>

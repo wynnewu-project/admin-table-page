@@ -3,8 +3,8 @@
     title="单选表格数据"
   >
     <ul> 
-      <li>selectable="single"</li>
-      <li>必须设置row-key</li>
+      <li class="info-list">设置属性 <strong class="red">selectable</strong> 为"single"，可通过单击来选择表格的其中一行</li>
+      <li class="info-list">此时，必须同时设置组件属性 <strong class="red">row-key</strong> </li>
     </ul>
     <h1 class="item-title">示例: 点击表格的某一行进行选择</h1>
     <p class="m-b-16">
@@ -12,7 +12,7 @@
     </p>
     <admin-table-page
       :columns="columns"
-      :data="data"
+      :local-data="data"
       selectable="single"
       row-key="username"
       @select-change="handleSelectChange"
