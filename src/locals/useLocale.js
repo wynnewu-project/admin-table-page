@@ -1,25 +1,23 @@
 import { createI18n } from "vue-i18n";
 import zhCn from "./zh-cn";
 import en from "./en";
-import { watch, ref } from "vue";
 
-export const useLocale = (lang) => {
-  const locale = ref(lang.value ?? "zhCn");
+export const useLocale = () => {
   const i18n = createI18n({
     legacy: false,
-    locale: locale.value,
+    locale: "zhCn",
     messages: {
       zhCn,
       en
     }
   });
-  watch(lang, (value) => {
-    i18n.global.locale.value = value;
-  }, {
-    immediate: true
-  })
+
+  const setLocale = (lang) => {
+    i18n.global.locale.value = lang;
+  }
   return {
-    t: i18n.global.t
+    translate: i18n.global.t,
+    setLocale
   }
 
 }

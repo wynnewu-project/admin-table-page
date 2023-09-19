@@ -23,7 +23,7 @@
     <p>
       <el-button @click="handleClearSelection">取消多选</el-button>
       <el-button @click="handleSort">按年龄降序排序</el-button>
-      <el-button @click="setRowOneSelected">选中第二行</el-button>
+      <el-button @click="setRowOneSelected">选中User2</el-button>
     </p>
     <admin-table-page
       ref="atpTableRef"
@@ -56,7 +56,6 @@ const handleSort = () => {
 }
 
 const setRowOneSelected = () => {
-  console.log('data2', data[1])
   atpTableRef.value.setCurrentRow(data[1])
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <el-col 
     v-bind="colBreakpoint"
-    v-for="{ name, searchType, label, ...field } in searchFields"
+    v-for="{ name, type, label, ...field } in searchFields"
     :key="name"
   >
     <el-form-item 
@@ -10,7 +10,7 @@
     >
       <atp-search-item
         v-model="query[name]"
-        :search-type="searchType"
+        :type="type"
         v-bind="field"
       />
     </el-form-item>

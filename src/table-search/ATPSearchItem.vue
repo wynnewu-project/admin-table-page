@@ -1,6 +1,6 @@
 <template> 
   <el-select 
-    v-if="searchType === 'select'" 
+    v-if="type === 'select'" 
     clearable
     style="width: 100%"
     :placeholder="t('placeholder.select')"
@@ -13,7 +13,7 @@
     />
   </el-select>
   <el-date-picker 
-    v-else-if="searchType === 'date'" 
+    v-else-if="type === 'date'" 
     value-format="YYYY-MM-DD"
     style="width: 100%"
   />
@@ -25,7 +25,7 @@ import { computed, inject } from 'vue';
 
  
 const props = defineProps({
-  searchType: {
+  type: {
     type: String,
     default: "input"
   },
