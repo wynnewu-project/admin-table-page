@@ -13,6 +13,9 @@ Admin Table Page component based on Vue3.js and Element-plus
 - Support Chinese and English language
 - Adaptive layout for different device
 
+## Issue Reporting
+If you have found a bug, please report it in this [issues](https://github.com/wynnewu-project/admin-table-page/issues) section. Thanks!
+
 ## Local Demo
 ```shell
 npm install / yarn install
