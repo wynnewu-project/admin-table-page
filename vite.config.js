@@ -23,7 +23,6 @@ export default defineConfig({
   ],
   build: {
     outDir: "lib",
-    sourcemap: true,
     lib: {
       entry: resolve(__dirname, "src/index.js"),
       name: "AdminTablePage",

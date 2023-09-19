@@ -13,6 +13,9 @@
 - 支持中/英文切换
 - 自适应布局
 
+## Issue Reporting
+如果在使用过程中发现bug，请来[这里](https://github.com/wynnewu-project/admin-table-page/issues)反馈，非常感谢！
+
 ## 本地Demo
 ```shell
 npm install / yarn install
