@@ -109,8 +109,8 @@
 //import { ElTable, ElPagination, ElCard, ElTableColumn, ElButton, ElDivider } from "element-plus";
 import AtpTool from "../table-tool/ATPTool.vue";
 import AtpSearch from "../table-search/ATPSearch.vue";
-import zhCn from "element-plus/lib/locale/lang/zh-cn";
-import en from "element-plus/lib/locale/lang/en";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+import en from "element-plus/es/locale/lang/en";
 
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import tableProps from "./props";
