@@ -204,9 +204,7 @@ export default {
         offset: this.offset,
         limit: this.limit
       }
-      console.log(this.fetchMethod)
       const res = await this.fetchMethod(finalQuery);
-      console.log('res', res)
       this.total = res[this.totalKey] ?? 0;
       this.tableData = res[this.listKey] ?? [];
     },
