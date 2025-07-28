@@ -1,7 +1,7 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.json",
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/**/*.json"],
-	"exclude": ["node_modules", "dist", "build", "coverage", "public"],
+	"exclude": ["node_modules", "public", "lib"],
 	"compilerOptions": {
 		/* Visit https://aka.ms/tsconfig to read more about this file */
 

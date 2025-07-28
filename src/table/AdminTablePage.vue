@@ -2,9 +2,9 @@
 	<el-config-provider :locale="configLocale">
 		<slot name="search">
 			<atp-search
-				v-if="filterFields.length || hiddenFilterFields.length"
-				:showFields="filterFields"
-				:hiddenFields="hiddenFilterFields"
+				v-if="searchFields.length || hiddenSearchFields.length"
+				:showFields="searchFields"
+				:hiddenFields="hiddenSearchFields"
 			/>
 		</slot>
 		<el-card>
@@ -82,7 +82,7 @@
 				>
 					<template #header>
 						<slot name="actions_header">{{
-							actionColumnLabel ?? translate("label.actionColumn")
+							actionColumnLabel ?? $t("label.actionColumn")
 						}}</slot>
 					</template>
 					<template #default="{ row }">
@@ -91,10 +91,10 @@
 							:row="row"
 						>
 							<template
-								v-for="({ text, show = true, onClick }, index) in actionColumn"
+								v-for="({ text, hidden, onClick }, index) in actionColumn"
 								:key="text"
 							>
-								<template v-if="show">
+								<template v-if="!hidden">
 									<el-divider
 										direction="vertical"
 										v-if="index"
@@ -117,7 +117,7 @@
 				<el-pagination
 					v-if="paginationable"
 					v-model:current-page="page"
-					v-model:page-size="limit"
+					v-model:page-size="pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					@size-change="getTableData"
 					@current-change="getTableData"
@@ -138,7 +138,6 @@
 		ItemsKey extends string = 'items'
 	"
 >
-//import { ElTable, ElPagination, ElCard, ElTableColumn, ElButton, ElDivider } from "element-plus";
 import AtpTool from "../table-tool/ATPTool.vue";
 import AtpSearch from "../table-search/ATPSearch.vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
@@ -154,28 +153,17 @@ import {
 	useTemplateRef,
 	watch,
 } from "vue";
-import tableProps from "./props";
-import { EL_TABLE_METHOD } from "./elTableMethod";
 import useMediaQuery from "../utils/useMediaQuery";
-import {
-	filter,
-	isNull,
-	isString,
-	omitBy,
-	slice,
-	isArray,
-	prop,
-} from "lodash/fp";
-import { useLocale } from "../locals/useLocale";
+import { omitBy } from "lodash/fp";
 import { debounce } from "lodash";
-import { createI18n } from "vue-i18n";
 import type {
 	PaginatedResult,
 	SearchField,
 	TableColumn,
 	TableProps,
 } from "@/type/table";
-import { pa } from "element-plus/es/locales.mjs";
+import type { TableInstance } from "element-plus";
+import { useI18n } from "vue-i18n";
 
 const props = withDefaults(
 	defineProps<TableProps<DataType, TotalKey, ItemsKey>>(),
@@ -194,15 +182,16 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-	(selectRows: DataType | DataType[]): void;
+	(e: "selectChange", selectedRows: DataType[]): void;
 }>();
 
-const tableRef = useTemplateRef("tableRef");
+const i18n = useI18n();
+
+const tableRef = useTemplateRef<TableInstance>("tableRef");
 const tableData = ref<DataType[]>([]);
 const filteredData = ref<DataType[]>(props.localData);
 const timer = ref<number | null>(null);
 const loading = ref(false);
-const selectedRows = ref<DataType[]>([]);
 const page = ref(1);
 const pageSize = ref(10);
 const total = ref(props.localData.length ?? 0);
@@ -211,9 +200,9 @@ const queryChange = ref(false);
 const searchFields = ref<SearchField[]>([]);
 const hiddenSearchFields = ref<SearchField[]>([]);
 const tableColumns = ref<TableColumn[]>();
+const selectedRows = ref<DataType[]>([]);
 
 const { breakpoint } = useMediaQuery();
-const { translate, setLocale } = useLocale();
 
 const configLocale = computed(() => {
 	return props.locale === "zhCn" ? zhCn : en;
@@ -230,6 +219,7 @@ const formatColumns = () => {
 		}
 		return col;
 	});
+	tableColumns.value = formatted;
 	formatted.forEach((col) => {
 		const { prop, label, searchable, searchConfig } = col;
 		if (
@@ -265,7 +255,7 @@ formatColumns();
 
 provide("breakpoint", breakpoint);
 provide("query", query);
-provide("translate", translate);
+provide("translate", i18n.t);
 
 const fetchRemoteData = async (params: Record<string, unknown> = {}) => {
 	const finalQuery = {
@@ -293,7 +283,7 @@ const fetchRemoteData = async (params: Record<string, unknown> = {}) => {
 };
 
 const filterLocalData = (params: Record<string, unknown> = {}) => {
-	if (queryChange || (params && JSON.stringify(params) !== "{}")) {
+	if (queryChange.value || (params && JSON.stringify(params) !== "{}")) {
 		const filterParams = omitBy((value) => {
 			return (
 				value === null ||
@@ -332,6 +322,7 @@ const filterLocalData = (params: Record<string, unknown> = {}) => {
 };
 
 const getTableData = async (params: Record<string, unknown> = {}) => {
+	console.log("getTableData", params);
 	try {
 		loading.value = true;
 		if (props.localData && !props.fetchMethod) {
@@ -344,7 +335,16 @@ const getTableData = async (params: Record<string, unknown> = {}) => {
 	}
 };
 
-const handleQueryChange = debounce(getTableData, 300);
+const reloadTableDebounced = () => {
+	const func = debounce(getTableData, 300);
+	func();
+};
+
+const handleSelectionChange = (rows: DataType | DataType[]) => {
+	const selected = Array.isArray(rows) ? rows : [rows];
+	selectedRows.value = selected;
+	emits("selectChange", selected);
+};
 const handleAutoRefresh = () => {
 	if (timer.value) {
 		window.clearInterval(timer.value);
@@ -372,6 +372,42 @@ onMounted(() => {
 onUnmounted(() => {
 	handlePauseAutoRefresh();
 });
+
+defineExpose({
+	tableRef,
+	reload: getTableData,
+	getSelections: () => selectedRows.value,
+	clearSelection: () => {
+		selectedRows.value = [];
+		if (!props.selectable) {
+			return;
+		}
+		if (props.selectable === "multiple") {
+			tableRef.value?.clearSelection();
+			return;
+		}
+		tableRef.value?.setCurrentRow(null);
+	},
+});
+
+watch(
+	query,
+	() => {
+		queryChange.value = true;
+		reloadTableDebounced();
+	},
+	{ deep: true },
+);
+
+watch(
+	() => props.locale,
+	(newLocale) => {
+		i18n.locale.value = newLocale;
+	},
+);
+
+watch(() => props.extraQuery, reloadTableDebounced);
+watch(() => props.localData, reloadTableDebounced, { immediate: true });
 </script>
 
 <style lang="scss">

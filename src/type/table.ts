@@ -8,9 +8,9 @@ import type { Component, Ref } from "vue";
 /**
  * render component type for the search field
  */
-type SearchRenderType = "input" | "select" | "date";
+export type SearchRenderType = "input" | "select" | "date";
 
-interface ColumnSearchConfig {
+export interface ColumnSearchConfig {
 	/**
 	 * The type of the search component.
 	 */
@@ -38,7 +38,7 @@ export interface SearchField extends ColumnSearchConfig {
 	label: string;
 }
 
-export interface TableColumn<T = unknown> extends Partial<ElTableColumn<T>> {
+export interface TableColumn extends Partial<ElTableColumn> {
 	/**
 	 * Hidden the column when `true`.
 	 */
@@ -53,7 +53,7 @@ export interface TableColumn<T = unknown> extends Partial<ElTableColumn<T>> {
 	searchConfig?: ColumnSearchConfig;
 }
 
-interface ToolButton extends ElButton {
+export interface ToolButton extends ElButton {
 	/**
 	 * The label for the tool button.
 	 */
@@ -68,7 +68,7 @@ interface ToolButton extends ElButton {
 	hidden?: boolean | Ref<boolean>;
 }
 
-interface RowAction<DataType> extends ElButton {
+export interface RowAction<DataType> extends ElButton {
 	/**
 	 * The label for the action button.
 	 */
