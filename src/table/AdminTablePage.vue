@@ -2,16 +2,20 @@
 	<el-config-provider :locale="configLocale">
 		<slot name="search">
 			<atp-search
-				v-if="searchFields.length || hiddenSearchFields.length"
+				v-if="
+					searchAreaMode === 'card' &&
+					(searchFields.length || hiddenSearchFields.length)
+				"
 				:showFields="searchFields"
 				:hiddenFields="hiddenSearchFields"
 			/>
 		</slot>
-		<el-card>
+		<component :is="tableWrapper ?? ElCard">
 			<slot name="tools">
 				<atp-tool
 					:buttons="toolButtons"
 					:refresh="refresh"
+					:inline-search="searchAreaMode === 'inline' ? searchFields : []"
 					@auto-refresh="handleAutoRefresh"
 					@manual-refresh="getTableData"
 					@pause-auto-refresh="handlePauseAutoRefresh"
@@ -125,7 +129,7 @@
 					v-bind="elPaginationProps"
 				/>
 			</div>
-		</el-card>
+		</component>
 	</el-config-provider>
 </template>
 
@@ -162,8 +166,9 @@ import type {
 	TableColumn,
 	TableProps,
 } from "@/type/table";
-import type { TableInstance } from "element-plus";
+import { ElCard, type TableInstance } from "element-plus";
 import { useI18n } from "vue-i18n";
+import { pa } from "element-plus/es/locales.mjs";
 
 const props = withDefaults(
 	defineProps<TableProps<DataType, TotalKey, ItemsKey>>(),
@@ -222,6 +227,7 @@ const formatColumns = () => {
 	tableColumns.value = formatted;
 	formatted.forEach((col) => {
 		const { prop, label, searchable, searchConfig } = col;
+		console.log({ prop, label, searchable, searchConfig });
 		if (
 			!searchable &&
 			(searchConfig === undefined || JSON.stringify(searchConfig) === "{}")
@@ -407,7 +413,16 @@ watch(
 );
 
 watch(() => props.extraQuery, reloadTableDebounced);
-watch(() => props.localData, reloadTableDebounced, { immediate: true });
+watch(
+	() => props.localData,
+	(newLocalData) => {
+		filteredData.value = newLocalData;
+		total.value = newLocalData.length;
+		page.value = 1;
+		reloadTableDebounced();
+	},
+	{ immediate: true },
+);
 </script>
 
 <style lang="scss">

@@ -16,17 +16,13 @@ export interface ColumnSearchConfig {
 	 */
 	type: SearchRenderType;
 	/**
-	 * The placeholder text for the search column.
-	 */
-	placeholder?: string;
-	/**
 	 * Whether the search component for the column is hidden by default.
 	 */
 	defaultHidden?: boolean;
 	/**
 	 * The options for the select component when `type` is `select`.
 	 */
-	selectOptions?: Array<{ label: string; value: unknown }> | unknown[];
+	selectOptions?: Array<{ label: string; value: unknown } | string | number>;
 	/**
 	 * default value for the search component.
 	 */
