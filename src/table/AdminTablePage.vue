@@ -15,11 +15,37 @@
 				<atp-tool
 					:buttons="toolButtons"
 					:refresh="refresh"
-					:inline-search="searchAreaMode === 'inline' ? searchFields : []"
+					:enable-inline-search="
+						(searchAreaMode === 'inline' && !!searchFields.length) ||
+						!!$slots['right_tools']
+					"
 					@auto-refresh="handleAutoRefresh"
 					@manual-refresh="getTableData"
 					@pause-auto-refresh="handlePauseAutoRefresh"
-				/>
+				>
+					<template #right_tools>
+						<slot name="right_tools">
+							<div
+								class="inline-search"
+								v-if="searchAreaMode === 'inline' && searchFields.length"
+							>
+								<atp-search-item
+									v-for="{
+										type,
+										name,
+										label,
+										defaultHidden,
+										...field
+									} in searchFields"
+									:type="type"
+									:key="name"
+									v-model="query[name]"
+									v-bind="field"
+								/>
+							</div>
+						</slot>
+					</template>
+				</atp-tool>
 			</slot>
 			<slot name="tips">
 				<el-alert
@@ -95,8 +121,11 @@
 							:row="row"
 						>
 							<template
-								v-for="({ text, hidden, onClick }, index) in actionColumn"
-								:key="text"
+								v-for="(
+									{ type = 'primary', link, label, hidden, onClick, ...btn },
+									index
+								) in actionColumn"
+								:key="label"
 							>
 								<template v-if="!hidden">
 									<el-divider
@@ -109,7 +138,8 @@
 										link
 										size="small"
 										@click="() => onClick(row)"
-										>{{ text }}</el-button
+										v-bind="btn"
+										>{{ label }}</el-button
 									>
 								</template>
 							</template>
@@ -137,7 +167,7 @@
 	setup
 	lang="ts"
 	generic="
-		DataType extends Record<string, unknown>,
+		DataType extends TableRowData = Record<string, unknown>,
 		TotalKey extends string = 'total',
 		ItemsKey extends string = 'items'
 	"
@@ -157,7 +187,7 @@ import {
 	useTemplateRef,
 	watch,
 } from "vue";
-import useMediaQuery from "../utils/useMediaQuery";
+import useMediaQuery from "../utils/useMediaQuery.ts";
 import { omitBy } from "lodash/fp";
 import { debounce } from "lodash";
 import type {
@@ -165,10 +195,11 @@ import type {
 	SearchField,
 	TableColumn,
 	TableProps,
+	TableRowData,
 } from "@/type/table";
 import { ElCard, type TableInstance } from "element-plus";
 import { useI18n } from "vue-i18n";
-import { pa } from "element-plus/es/locales.mjs";
+import AtpSearchItem from "../table-search/ATPSearchItem.vue";
 
 const props = withDefaults(
 	defineProps<TableProps<DataType, TotalKey, ItemsKey>>(),
@@ -200,7 +231,7 @@ const loading = ref(false);
 const page = ref(1);
 const pageSize = ref(10);
 const total = ref(props.localData.length ?? 0);
-const query = ref<Record<string, any>>({});
+const query = ref<Record<PropertyKey, unknown>>({});
 const queryChange = ref(false);
 const searchFields = ref<SearchField[]>([]);
 const hiddenSearchFields = ref<SearchField[]>([]);
@@ -227,7 +258,6 @@ const formatColumns = () => {
 	tableColumns.value = formatted;
 	formatted.forEach((col) => {
 		const { prop, label, searchable, searchConfig } = col;
-		console.log({ prop, label, searchable, searchConfig });
 		if (
 			!searchable &&
 			(searchConfig === undefined || JSON.stringify(searchConfig) === "{}")
@@ -328,7 +358,6 @@ const filterLocalData = (params: Record<string, unknown> = {}) => {
 };
 
 const getTableData = async (params: Record<string, unknown> = {}) => {
-	console.log("getTableData", params);
 	try {
 		loading.value = true;
 		if (props.localData && !props.fetchMethod) {

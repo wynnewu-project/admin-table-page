@@ -2,12 +2,12 @@
 	<div class="button-tool">
 		<div class="button-tool-custom">
 			<template
-				v-for="{ type, label, onClick, hidden, ...btn } in buttons"
+				v-for="{ type = 'primary', label, onClick, hidden, ...btn } in buttons"
 				:key="label"
 			>
 				<el-button
 					v-if="!hidden"
-					type="primary"
+					:type="type"
 					@click="onClick"
 					v-bind="btn"
 				>
@@ -16,20 +16,12 @@
 			</template>
 		</div>
 		<div class="button-tool-default">
-			<div
-				class="inline-search"
-				v-if="inlineSearch?.length"
-			>
-				<atp-search-item
-					v-for="{ type, name, label, defaultHidden, ...field } in inlineSearch"
-					:type="type"
-					:key="name"
-					v-model="query![name]"
-					v-bind="field"
-				/>
-			</div>
+			<slot name="right_tools" />
 			<template v-if="refresh">
-				<el-divider direction="vertical" />
+				<el-divider
+					direction="vertical"
+					v-if="enableRightTools"
+				/>
 				<el-button-group>
 					<el-tooltip
 						:content="translate?.('button.refresh')"
@@ -70,23 +62,18 @@
 </template>
 
 <script setup lang="ts">
-import type { SearchField, ToolButton } from "@/type/table";
+import type { ToolButton } from "@/type/table";
 import { VideoPause, Refresh, RefreshRight } from "@element-plus/icons-vue";
-import AtpSearchItem from "../table-search/ATPSearchItem.vue";
-
 import { inject, ref } from "vue";
 import type { ComposerTranslation } from "vue-i18n";
 
-const props = defineProps<{
+defineProps<{
 	buttons: ToolButton[];
-	inlineSearch?: SearchField[];
 	refresh?: string | number;
+	enableRightTools?: boolean;
 }>();
-console.log("props", props);
 
 const emits = defineEmits(["manualRefresh", "autoRefresh", "pauseAutoRefresh"]);
-
-const query = inject<Record<PropertyKey, unknown>>("query");
 
 const translate = inject<ComposerTranslation>("translate");
 

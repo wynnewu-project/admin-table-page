@@ -1,9 +1,15 @@
-import { Delete, Loading, Plus } from "@element-plus/icons-vue";
+import { Delete, Plus, View } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import type {
+	RowAction,
+	SearchField,
+	TableColumn,
+	ToolButton,
+} from "../../src/type/table";
 
 export const stringColumns = ["username", "age", "lastLogin"];
 
-export const columns = [
+export const columns: TableColumn[] = [
 	{
 		prop: "username",
 		label: "Username",
@@ -18,7 +24,7 @@ export const columns = [
 	},
 ];
 
-export const filterColumns = [
+export const filterColumns: TableColumn[] = [
 	{
 		prop: "username",
 		label: "Username",
@@ -29,61 +35,29 @@ export const filterColumns = [
 		label: "Age",
 		searchConfig: {
 			type: "select",
-			selectOptions: ["18", "19", "20", "21", "22"],
+			selectOptions: [18, 19, 20, 21, 22],
 		},
 	},
 ];
 
-export const searchFields = [
+export const toolButtons: ToolButton[] = [
 	{
-		name: "username",
-		label: "Username",
-	},
-	{
-		name: "age",
-		label: "Age",
-		searchType: "select",
-		options: ["18", "19", "20", "21", "22"],
-		/* or define the options with the object arrays
-  options: [{ 
-    value: 18,
-    label: "18"
-  }, {
-    value: 19,
-    label: "19",
-  }]
-  */
-		//you can add other el-select attributes:
-		multiple: true,
-	},
-];
-
-export const hiddenSearchFields = [
-	{
-		name: "lastLogin",
-		label: "Login",
-		searchType: "date",
-	},
-];
-
-export const toolButtons = [
-	{
-		text: "New User",
+		label: "New User",
 		onClick: () => {
 			console.log("new user");
 		},
 	},
 	{
-		text: "Delete",
+		label: "Delete",
 		onClick: () => {
 			console.log("delete user");
 		},
 	},
 ];
 
-export const toolButtonsEl = [
+export const toolButtonsEl: ToolButton[] = [
 	{
-		text: "New User",
+		label: "New User",
 		icon: Plus,
 		//if you import element-plus/icons-vue global, you can use string
 		//icon: "Plus"
@@ -92,7 +66,7 @@ export const toolButtonsEl = [
 		},
 	},
 	{
-		text: "Delete",
+		label: "Delete",
 		icon: Delete,
 		onClick: () => {
 			console.log("delete user");
@@ -102,20 +76,26 @@ export const toolButtonsEl = [
 	},
 ];
 
-export const data = [
+export type ExampleData = {
+	username: string;
+	age: number;
+	lastLogin: string;
+};
+
+export const data: ExampleData[] = [
 	{
 		username: "user1",
-		age: "18",
+		age: 18,
 		lastLogin: "2023-01-03",
 	},
 	{
 		username: "user2",
-		age: "19",
+		age: 19,
 		lastLogin: "2023-01-02",
 	},
 ];
 
-export const generatorData = (min = 0, max = 20) => {
+export const generatorData = (min = 0, max = 20): ExampleData[] => {
 	const length = Math.floor(Math.random() * (max - min + 1) + min);
 	return [...Array(length)].map((_item, index) => ({
 		username: `user${index}`,
@@ -131,21 +111,26 @@ export const generatorData = (min = 0, max = 20) => {
  *  - "list": the list of table datas, you can map another words to this key by "listKey" props
  *
  */
-export const fetchMethod = () => {
+export const fetchMethod = (): Promise<{
+	total: number;
+	items: ExampleData[];
+}> => {
 	ElMessage.success({
 		message: "fetch data from remote",
 		offset: 100,
 	});
 	return new Promise((resolve, reject) => {
-		const data = generatorData(8, 10);
+		const data = generatorData(11);
 		resolve({
 			total: data.length,
-			items: data,
+			items: data.slice(0, 10), // return the first 10 items
 		});
 	});
 };
 
-export const fetchFilterMethod = (query) => {
+export const fetchFilterMethod = (
+	query: Record<PropertyKey, unknown>,
+): Promise<{ total: number; items: ExampleData[] }> => {
 	ElMessage.success({
 		message: "fetch data from remote",
 		offset: 100,
@@ -161,14 +146,13 @@ export const fetchFilterMethod = (query) => {
 				if (query[k] === undefined || query[k] === null || query[k] === "")
 					continue;
 				if (typeof d[k] === "string") {
-					filter = d[k].includes(query[k]);
+					filter = d[k].includes(query[k] as string);
 				} else {
 					filter = d[k] === Number(query[k]);
 				}
 			}
 			return filter;
 		});
-		console.log({ data });
 		resolve({
 			total: data.length,
 			items: data,
@@ -176,7 +160,9 @@ export const fetchFilterMethod = (query) => {
 	});
 };
 
-export const fetchMethodOtherKey = (query) => {
+export const fetchMethodOtherKey = (
+	query: Record<PropertyKey, unknown>,
+): Promise<{ count: number; list: ExampleData[] }> => {
 	ElMessage.success({
 		message: "fetch data from remote",
 		offset: 100,
@@ -190,22 +176,30 @@ export const fetchMethodOtherKey = (query) => {
 	});
 };
 
-export const actionColumn = [
+export const actionColumn: RowAction<ExampleData>[] = [
 	{
-		text: "编辑",
+		label: "编辑",
 		onClick: () => {
 			console.log("edit");
 		},
 	},
 	{
-		text: "删除",
+		label: "删除",
 		onClick: () => {
 			console.log("delete");
 		},
 	},
+	{
+		icon: View,
+		label: "查看",
+		onClick: () => {
+			console.log("view");
+		},
+		hidden: true, // this button will not be shown
+	},
 ];
 
-export const columnsWidth = [
+export const columnsWidth: TableColumn[] = [
 	{
 		prop: "username",
 		label: "Username",

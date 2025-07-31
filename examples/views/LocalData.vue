@@ -57,13 +57,17 @@
 	</examples-content>
 </template>
 
-<script setup>
-import { columns, generatorData, stringColumns } from "./variables";
+<script setup lang="ts">
+import {
+	columns,
+	ExampleData,
+	generatorData,
+	stringColumns,
+} from "./variables";
 import ExamplesContent from "../components/ExamplesContent.vue";
 import { ref } from "vue";
-const dataForObjectColumns = ref(generatorData(11));
+const dataForObjectColumns = ref<ExampleData[]>(generatorData(11));
 const handleUpdateData = () => {
 	dataForObjectColumns.value = generatorData(23, 25);
-	console.log("数据已更新", dataForObjectColumns.value);
 };
 </script>

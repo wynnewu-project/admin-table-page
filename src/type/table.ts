@@ -2,8 +2,14 @@ import type {
 	ButtonProps as ElButton,
 	TableColumnCtx as ElTableColumn,
 	PaginationProps as ElPaginationProps,
+	MessageBoxData,
 } from "element-plus";
+import type { ElMessageBoxOptions } from "element-plus/lib";
 import type { Component, Ref } from "vue";
+
+export type QueryParams = Record<PropertyKey, unknown>;
+
+export type TableRowData = Record<PropertyKey, unknown>;
 
 /**
  * render component type for the search field
@@ -14,7 +20,7 @@ export interface ColumnSearchConfig {
 	/**
 	 * The type of the search component.
 	 */
-	type: SearchRenderType;
+	type?: SearchRenderType;
 	/**
 	 * Whether the search component for the column is hidden by default.
 	 */
@@ -49,7 +55,7 @@ export interface TableColumn extends Partial<ElTableColumn> {
 	searchConfig?: ColumnSearchConfig;
 }
 
-export interface ToolButton extends ElButton {
+export interface ToolButton extends Partial<ElButton> {
 	/**
 	 * The label for the tool button.
 	 */
@@ -64,7 +70,7 @@ export interface ToolButton extends ElButton {
 	hidden?: boolean | Ref<boolean>;
 }
 
-export interface RowAction<DataType> extends ElButton {
+export interface RowAction<DataType> extends Partial<ElButton> {
 	/**
 	 * The label for the action button.
 	 */

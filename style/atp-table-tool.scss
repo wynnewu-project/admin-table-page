@@ -16,10 +16,14 @@
 }
 .button-tool-default {
 	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 
 .button-tool .inline-search {
 	display: flex;
+	flex: 1;
 	justify-content: flex-end;
 	flex-wrap: wrap;
 	gap: 8px;

@@ -1,9 +1,10 @@
 {
-	"extends": "@vue/tsconfig/tsconfig.json",
+	"extends": "@vue/tsconfig/tsconfig.dom.json",
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/**/*.json"],
 	"exclude": ["node_modules", "public", "lib"],
 	"compilerOptions": {
 		/* Visit https://aka.ms/tsconfig to read more about this file */
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
 		/* Projects */
 		// "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */

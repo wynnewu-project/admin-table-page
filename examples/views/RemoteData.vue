@@ -17,7 +17,7 @@
 		<p>
 			服务端返回数据格式默认为{ total: number, items: array },
 			其中total为Number类型，返回表格数据总记录数;
-			list为Array类型，返回当前页的数据列表
+			items为Array类型，返回当前页的数据列表
 		</p>
 		<admin-table-page
 			:columns="columns"
@@ -81,8 +81,8 @@ import { ref } from "vue";
 
 const params = ref();
 
-const fetchMethodExtra = (query) => {
+const fetchMethodExtra = (query: Record<PropertyKey, unknown>) => {
 	params.value = query;
-	return fetchMethod(query);
+	return fetchMethod();
 };
 </script>

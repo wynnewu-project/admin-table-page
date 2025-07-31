@@ -30,7 +30,7 @@ import type { ComposerTranslation } from "vue-i18n";
 
 const props = withDefaults(
 	defineProps<{
-		type: string;
+		type?: string;
 		label?: string;
 		selectOptions?: ColumnSearchConfig["selectOptions"];
 	}>(),

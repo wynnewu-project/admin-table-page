@@ -9,7 +9,16 @@
 			<strong class="red">searchConfig</strong>
 			属性，组件会为这些字段添加该列对应的搜索框
 		</p>
-		<p>同时，也支持slot自定义搜索区域</p>
+		<p>
+			同时，也支持通过name为<strong class="red">search</strong>
+			的slot自定义搜索区域, 参考
+			<el-link
+				type="primary"
+				href="/slot#搜索框"
+			>
+				自定义搜索框
+			</el-link>
+		</p>
 		<ul>
 			<li class="info-list">
 				<strong>searchable</strong>: boolean，为字段添加input搜索框
@@ -110,13 +119,13 @@
 	</examples-content>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { filterColumns, fetchFilterMethod, data } from "./variables";
 import ExamplesContent from "../components/ExamplesContent.vue";
 import { ref } from "vue";
 
 const params = ref();
-const remoteMethod = (query) => {
+const remoteMethod = (query: Record<PropertyKey, unknown>) => {
 	params.value = query;
 	return fetchFilterMethod(query);
 };
