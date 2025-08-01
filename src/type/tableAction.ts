@@ -1,4 +1,4 @@
-import type { QueryParams, TableRowData } from "./table";
+import type { TableRowData } from "./table";
 
 export type ConfirmHandler = (
 	message: string,
@@ -11,7 +11,7 @@ export type RowActionHandler = (
 	row: TableRowData,
 ) => Promise<void>;
 
-export type BatchActionHandler = (
+export type TableBatchActionHandler = (
 	rowIds: unknown[],
 	rows: TableRowData[],
 ) => Promise<void>;
@@ -34,13 +34,28 @@ export interface ActionHandlerParamsWithConfirm extends ActionHandlerParams {
 	confirmHandler?: (callback: (params: ActionHandlerParams) => void) => void;
 }
 
-export interface TableBatchActionParams extends CommonHandlerParams {
+export interface TableActionHandlerParams extends CommonHandlerParams {
+	handler: () => Promise<void>;
+	actionLabel?: string;
+	confirmMsg?: string;
+	confirmHandler?: (callback: (params: ActionHandlerParams) => void) => void;
+}
+
+export interface RowActionHandlerParams
+	extends Omit<TableActionHandlerParams, "handler"> {
+	handler: RowActionHandler;
+	row: TableRowData;
+}
+
+export interface TableBatchActionParams
+	extends Omit<TableActionHandlerParams, "handler"> {
 	/**
 	 * The function that is called when the batch action is performed.
 	 */
-	handler: BatchActionHandler;
+	handler: TableBatchActionHandler;
 	/**
 	 * Show feedback when select none rows
 	 */
 	feedbackWhenSelectNone?: boolean;
+	noneSelectionMsg?: string;
 }

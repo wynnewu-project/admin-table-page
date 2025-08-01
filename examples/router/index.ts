@@ -72,6 +72,10 @@ const router = createRouter({
 					path: "/wrapper",
 					component: () => import("../views/TableWrapper.vue"),
 				},
+				{
+					path: "/composition",
+					component: () => import("../views/UseTable.vue"),
+				},
 			],
 		},
 	],

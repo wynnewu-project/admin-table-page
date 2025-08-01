@@ -2,9 +2,7 @@ import type {
 	ButtonProps as ElButton,
 	TableColumnCtx as ElTableColumn,
 	PaginationProps as ElPaginationProps,
-	MessageBoxData,
 } from "element-plus";
-import type { ElMessageBoxOptions } from "element-plus/lib";
 import type { Component, Ref } from "vue";
 
 export type QueryParams = Record<PropertyKey, unknown>;
@@ -68,6 +66,10 @@ export interface ToolButton extends Partial<ElButton> {
 	 * Hides the button when `true`.
 	 */
 	hidden?: boolean | Ref<boolean>;
+	/**
+	 * If disable the button when selection is none in multiple selection
+	 */
+	disabledWhenNoSelect: boolean;
 }
 
 export interface RowAction<DataType> extends Partial<ElButton> {
@@ -87,6 +89,10 @@ export interface RowAction<DataType> extends Partial<ElButton> {
 	 * Whether the action button is hidden
 	 */
 	hidden?: boolean | Ref<boolean> | ((row: DataType) => boolean);
+	/**
+	 * loading
+	 */
+	acting?: boolean | Ref<boolean>;
 }
 
 export type PaginatedResult<
@@ -100,7 +106,7 @@ export type PaginatedResult<
 };
 
 export interface TableProps<
-	DataType,
+	DataType extends Record<PropertyKey, unknown> = Record<PropertyKey, unknown>,
 	TotalKey extends string = "total",
 	ItemsKey extends string = "items",
 > {
@@ -167,7 +173,7 @@ export interface TableProps<
 	/**
 	 * The operations column configuration.
 	 */
-	actionColumn?: RowAction<DataType>[];
+	actionColumn?: RowAction<DataType>[] | Ref<RowAction<DataType>[]>;
 	/**
 	 * The label for the action column. When locale is `zhCn`, the default is `操作`, otherwise it's `Operations`.
 	 */

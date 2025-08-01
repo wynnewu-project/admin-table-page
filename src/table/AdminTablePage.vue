@@ -15,6 +15,8 @@
 				<atp-tool
 					:buttons="toolButtons"
 					:refresh="refresh"
+					:is-multiple-selected="selectable === 'multiple'"
+					:has-selected="!!selectedRows.length"
 					:enable-inline-search="
 						(searchAreaMode === 'inline' && !!searchFields.length) ||
 						!!$slots['right_tools']
@@ -105,7 +107,7 @@
 				</template>
 				<slot name="extra_columns" />
 				<el-table-column
-					v-if="$slots.actions || actionColumn.length"
+					v-if="$slots.actions || toValue(actionColumn).length"
 					prop="actions"
 					align="center"
 					v-bind="actionColumnProps"
@@ -124,7 +126,7 @@
 								v-for="(
 									{ type = 'primary', link, label, hidden, onClick, ...btn },
 									index
-								) in actionColumn"
+								) in toValue(actionColumn)"
 								:key="label"
 							>
 								<template v-if="!hidden">

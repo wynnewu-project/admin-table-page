@@ -29,7 +29,16 @@
 		</p>
 		<admin-table-page
 			:columns="columns"
-			:toolButtons="toolButtons"
+			row-key="username"
+			:toolButtons="[
+				...toolButtons,
+				{
+					label: 'Batch delete',
+					disabledWhenNoSelect: true,
+				},
+			]"
+			:data="data"
+			selectable="multiple"
 		/>
 		<h1
 			class="item-title"
@@ -45,6 +54,6 @@
 	</examples-content>
 </template>
 <script setup lang="ts">
-import { columns, toolButtons, toolButtonsEl } from "./variables";
+import { columns, data, toolButtons, toolButtonsEl } from "./variables";
 import ExamplesContent from "../components/ExamplesContent.vue";
 </script>

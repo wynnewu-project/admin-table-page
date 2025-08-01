@@ -27,6 +27,9 @@
 						>
 						<el-menu-item index="/slot"> slot自定义</el-menu-item>
 						<el-menu-item index="/wrapper"> Table Wrapper组件 </el-menu-item>
+						<el-menu-item index="/composition">
+							useTable Composition API</el-menu-item
+						>
 					</el-sub-menu>
 				</el-menu>
 			</el-scrollbar>

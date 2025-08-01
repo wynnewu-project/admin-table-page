@@ -16,6 +16,12 @@ export default {
 		select: "请选择",
 	},
 	feedback: {
-		operationSuccess: "操作成功",
+		operation: {
+			success: "操作成功",
+			failed: "操作失败",
+		},
+		select: {
+			none: "请至少选择1项",
+		},
 	},
 };

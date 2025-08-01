@@ -2,13 +2,26 @@
 	<div class="button-tool">
 		<div class="button-tool-custom">
 			<template
-				v-for="{ type = 'primary', label, onClick, hidden, ...btn } in buttons"
+				v-for="{
+					type = 'primary',
+					label,
+					onClick,
+					hidden,
+					disabledWhenNoSelect,
+					disabled,
+					...btn
+				} in buttons"
 				:key="label"
 			>
 				<el-button
 					v-if="!hidden"
 					:type="type"
 					@click="onClick"
+					:disabled="
+						disabledWhenNoSelect && isMultipleSelected && !hasSelected
+							? true
+							: disabled
+					"
 					v-bind="btn"
 				>
 					{{ label }}
@@ -71,6 +84,8 @@ defineProps<{
 	buttons: ToolButton[];
 	refresh?: string | number;
 	enableRightTools?: boolean;
+	hasSelected?: boolean;
+	isMultipleSelected?: boolean;
 }>();
 
 const emits = defineEmits(["manualRefresh", "autoRefresh", "pauseAutoRefresh"]);

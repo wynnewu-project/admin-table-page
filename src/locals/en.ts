@@ -20,5 +20,8 @@ export default {
 			success: "Operation succeeded",
 			failed: "Operation failed",
 		},
+		select: {
+			none: "Please select at least 1 item",
+		},
 	},
 };

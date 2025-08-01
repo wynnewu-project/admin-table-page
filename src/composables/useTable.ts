@@ -6,20 +6,21 @@ import type { TableRowData } from "@/type/table";
 import type {
 	ActionHandlerParams,
 	ActionHandlerParamsWithConfirm,
-	BatchActionParams,
-	ConfirmHandler,
-	HandleRowActionParams,
-	HandleRowActionParamsWithConfirm,
 	RowActionHandlerParams,
+	TableActionHandlerParams,
 	TableBatchActionParams,
 } from "@/type/tableAction";
-import type { pa } from "element-plus/es/locales.mjs";
 
-export function useTable(tableRefKey = "tableRef", idKey: PropertyKey = "id") {
+export function useTable({
+	tableRefKey = "tableRef",
+	idKey = "id",
+}: {
+	tableRefKey?: string;
+	idKey?: PropertyKey;
+} = {}) {
 	const externalTableRef = useTemplateRef<any>(tableRefKey);
 	const { systemConfirm } = useUtils();
 	const i18n = useI18n();
-	const loading = ref(false);
 
 	const handleAction = async ({
 		handler,
@@ -28,19 +29,17 @@ export function useTable(tableRefKey = "tableRef", idKey: PropertyKey = "id") {
 		failedFeedback,
 	}: ActionHandlerParams) => {
 		try {
-			loading.value = true;
 			await handler();
 			ElMessage.success(
 				successFeedback ?? i18n.t(`feedback.operation.success`),
 			);
 			if (reload) {
-				externalTableRef.value.tableRef.reload();
+				console.log("reload");
+				externalTableRef.value.reload();
 			}
 		} catch (error) {
 			ElMessage.error(failedFeedback ?? i18n.t(`feedback.operation.failed`));
 			console.error("Row action failed:", error);
-		} finally {
-			loading.value = false;
 		}
 	};
 
@@ -60,44 +59,55 @@ export function useTable(tableRefKey = "tableRef", idKey: PropertyKey = "id") {
 		});
 	};
 
+	const handleTableAction = async ({
+		confirmMsg,
+		confirmHandler,
+		actionLabel,
+		...params
+	}: TableActionHandlerParams) => {
+		if (confirmMsg) {
+			await handleActionWithConfirm({
+				confirmMsg,
+				confirmHandler,
+				...params,
+			});
+			return;
+		}
+		await handleAction(params);
+	};
+
 	const handleRowAction = async ({
 		handler,
 		row,
-		confirmMsg,
-		confirmHandler,
-		...commonParams
+		...params
 	}: RowActionHandlerParams) => {
 		const rowActionHandler = async () => {
 			await handler(row[idKey], row);
 		};
-		if (confirmMsg) {
-			const params: ActionHandlerParamsWithConfirm = {
-				...commonParams,
-				handler: rowActionHandler,
-				confirmMsg,
-				confirmHandler,
-			};
-			await handleActionWithConfirm(params);
-			return;
-		}
-		await handleAction({ handler: rowActionHandler, ...commonParams });
+		await handleTableAction({
+			handler: rowActionHandler,
+			...params,
+		});
 	};
 
 	const handleBatchAction = async ({
 		handler,
 		feedbackWhenSelectNone,
+		noneSelectionMsg,
+		...params
 	}: TableBatchActionParams) => {
 		const selectedRows =
-			externalTableRef.value.tableRef.getSelectedRowIds() as TableRowData[];
+			externalTableRef.value.getSelections() as TableRowData[];
 		if (selectedRows.length) {
 			const selectedIds = selectedRows.map((row) => row[idKey]);
-			const batchHandler = () => {
-				handler(selectedIds, selectedRows);
+			const batchHandler = async () => {
+				await handler(selectedIds, selectedRows);
 			};
+			await handleTableAction({ handler: batchHandler, ...params });
 			return;
 		}
 		if (feedbackWhenSelectNone) {
-			ElMessage.warning("");
+			ElMessage.warning(noneSelectionMsg ?? i18n.t("feedback.select.none"));
 		}
 	};
 
@@ -105,6 +115,5 @@ export function useTable(tableRefKey = "tableRef", idKey: PropertyKey = "id") {
 		tableRef: externalTableRef,
 		handleBatchAction,
 		handleRowAction,
-		loading,
 	};
 }
